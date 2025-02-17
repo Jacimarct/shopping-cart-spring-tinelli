@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
@@ -11,7 +11,7 @@
 
 			<div class="card card-sh">
 				<div class="card-header text-center">
-					<p class="fs-4">Cart Page</p>
+					<p class="fs-4">Página do Carrinho</p>
 					<th:block th:if="${session.succMsg}">
 						<p class="text-success fw-bold">[[${session.succMsg}]]</p>
 						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -27,11 +27,11 @@
 						<thead>
 							<tr>
 								<th scope="col">Sl No</th>
-								<th scope="col">Image</th>
-								<th scope="col">Product Name</th>
-								<th scope="col">Price</th>
-								<th scope="col" class="text-center">Quantity</th>
-								<th scope="col">Total Price</th>
+								<th scope="col">Imagem</th>
+								<th scope="col">Nome do Produto</th>
+								<th scope="col">Preço</th>
+								<th scope="col" class="text-center">Quantidade</th>
+								<th scope="col">Total do Preço</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -53,14 +53,14 @@
 							</tr>
 							<tr>
 								<td colspan="4"></td>
-								<td class="fw-bold">Total Price</td>
-								<td class="fw-bold">&#8377; [[${totalOrderPrice}]]</td>
+								<td class="fw-bold">Soma do Total dos Preços</td>
+								<td class="fw-bold">R&#36; [[${totalOrderPrice}]]</td>
 							</tr>
 
 						</tbody>
 					</table>
 					<div class="text-center">
-						<a href="/user/orders" class="btn btn-warning"> Proceed Payment</a>
+						<a href="/user/orders" class="btn btn-warning"> Proceder o Pagamento</a>
 					</div>
 				</div>
 			</div>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
@@ -12,7 +12,7 @@
 				<div class="col-md-3">
 					<div class="card card-sh">
 						<div class="card-header text-center ">
-							<p class="fs-4">Add Category</p>
+							<p class="fs-4">Cadastrar Categoria</p>
 							<th:block th:if="${session.succMsg}">
 								<p class="text-success fw-bold">[[${session.succMsg}]]</p>
 								<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -28,33 +28,33 @@
 							<form action="/admin/saveCategory" method="post"
 								enctype="multipart/form-data">
 								<div class="mb-3">
-									<label>Enter Category</label> <input type="text" name="name"
+									<label>Digite a Categoria</label> <input type="text" name="name"
 										class="form-control">
 								</div>
 
 								<div class="mb-3">
-									<label>Status</label>
+									<label>Situação</label>
 
 									<div class="form-check">
 										<input class="form-check-input" type="radio" checked
 											value="true" name="isActive" id="flexRadioDefault1">
 										<label class="form-check-label" for="flexRadioDefault1">
-											Active </label>
+											Ativo </label>
 									</div>
 									<div class="form-check">
 										<input class="form-check-input" type="radio" name="isActive"
 											value="false" id="flexRadioDefault2"> <label
 											class="form-check-label" for="flexRadioDefault2">
-											Inactive </label>
+											Inativo </label>
 									</div>
 
 								</div>
 
 								<div class="mb-3">
-									<label>Upload Image</label> <input type="file" name="file"
+									<label>Carregar Imagem</label> <input type="file" name="file"
 										class="form-control">
 								</div>
-								<button class="btn btn-primary col-md-12 mt-2">Save</button>
+								<button class="btn btn-primary col-md-12 mt-2">Salvar</button>
 							</form>
 						</div>
 					</div>
@@ -62,16 +62,16 @@
 
 				<div class="col-md-8">
 					<div class="card card-sh">
-						<div class="card-header text-center fs-4">Category Details</div>
+						<div class="card-header text-center fs-4">Detalhes da Categoria</div>
 						<div class="card-body">
 							<table class="table">
 								<thead>
 									<tr>
 										<th scope="col">Sl No</th>
-										<th scope="col">Category</th>
-										<th scope="col">Status</th>
-										<th scope="col">Image</th>
-										<th scope="col">Action</th>
+										<th scope="col">Categoria</th>
+										<th scope="col">Situação</th>
+										<th scope="col">Imagem</th>
+										<th scope="col">Ação</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -84,17 +84,17 @@
 											width="50px" height="50px"></td>
 										<td><a th:href="@{'/admin/loadEditCategory/'+${cat.id}}"
 											class="btn btn-primary btn-sm"><i
-												class="fa-solid fa-pen-to-square  fa-1x"></i> Edit </a> <a
+												class="fa-solid fa-pen-to-square  fa-1x"></i> Editar </a> <a
 											th:href="@{'/admin/deleteCategory/'+${cat.id}}"
 											class="btn btn-danger btn-sm"><i
-												class="fa-solid fa-trash  fa-1x"></i>Delete</a></td>
+												class="fa-solid fa-trash  fa-1x"></i> Excluir</a></td>
 									</tr>
 
 								</tbody>
 							</table>
 
 							<div class="row">
-								<div class="col-md-4">Total Category :
+								<div class="col-md-4">Total Categoria :
 									[[${totalElements}]]</div>
 								<div class="col-md-6">
 

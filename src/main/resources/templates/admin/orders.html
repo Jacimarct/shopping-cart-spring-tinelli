@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	<section>
 		<div class="container-fluid mt-5 p-1">
 			<div class="row">
-				<p class="text-center fs-3 mt-2">All Orders</p>
+				<p class="text-center fs-3 mt-2">Todos os Pedidos</p>
 				<hr>
 				<a href="/admin/" class="text-decoration-none"><i
-					class="fa-solid fa-arrow-left"></i> Back</a>
+					class="fa-solid fa-arrow-left"></i>    Voltar</a>
 				<th:block th:if="${session.succMsg}">
 					<p class="text-success fw-bold text-center">[[${session.succMsg}]]</p>
 					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -22,16 +22,16 @@
 					<p class="text-danger fw-bold text-center">[[${session.errorMsg}]]</p>
 					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
 				</th:block>
-				<div class="col-md-4 p-4">
+				<div class="col-md-8 p-4">
 
 					<form action="/admin/search-order" method="get">
 						<div class="row">
 							<div class="col">
 								<input type="text" class="form-control " name="orderId"
-									placeholder="Enter order id">
+									placeholder="Insira o Identificador do pedido">
 							</div>
 							<div class="col">
-								<button class="btn btn-primary col">Search</button>
+								<button class="btn btn-primary col">Pesquisar</button>
 							</div>
 						</div>
 					</form>
@@ -42,13 +42,13 @@
 					<table class="table table-bordered card-sh">
 						<thead class="table-light">
 							<tr>
-								<th scope="col">Order Id</th>
-								<th scope="col">Deliver Details</th>
-								<th scope="col">Date</th>
-								<th scope="col">Product Details</th>
-								<th scope="col">Price</th>
-								<th scope="col">Status</th>
-								<th scope="col">Action</th>
+								<th scope="col">Identificação<br> do Pedido</th>
+								<th scope="col">Detalhes da Entrega</th>
+								<th scope="col">Data do Pedido</th>
+								<th scope="col">Detalhes do Produto</th>
+								<th scope="col">Preço</th>
+								<th scope="col">Situação</th>
+								<th scope="col">Ação</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -65,9 +65,6 @@
 											[[${orderDtls.orderAddress.city}]] <br> State :
 											[[${orderDtls.orderAddress.state}]],
 											[[${orderDtls.orderAddress.pincode}]]
-
-
-
 										</td>
 										<td>[[${orderDtls.orderDate}]]</td>
 										<td>[[${orderDtls.product.title}]]</td>
@@ -81,24 +78,24 @@
 												<div class="row">
 													<div class="col">
 														<select class="form-control" name="st">
-															<option>--select--</option>
-															<option value="1">In Progress</option>
-															<option value="2">Order Received</option>
-															<option value="3">Product Packed</option>
-															<option value="4">Out for Delivery</option>
-															<option value="5">Delivered</option>
-															<option value="6">Cancelled</option>
+															<option>--Selecione--</option>
+															<option value="1">Em Andamento</option>
+															<option value="2">Pedido Recebido</option>
+															<option value="3">Produto Embalado</option>
+															<option value="4">Saida para Entrega</option>
+															<option value="5">Entregue</option>
+															<option value="6">Cancelado</option>
 														</select>
 													</div>
 													<input th:value="${orderDtls.id}" name="id" type="hidden">
 													<div class="col">
 														<th:block
 															th:if="${orderDtls.status=='Cancelled' || orderDtls.status=='Delivered'}">
-															<button class="btn btn-primary btn-sm col disabled">Update</button>
+															<button class="btn btn-primary btn-sm col disabled">Atualizar</button>
 														</th:block>
 														<th:block
 															th:unless="${orderDtls.status=='Cancelled' || orderDtls.status=='Delivered'}">
-															<button class="btn btn-sm btn-primary ">Update</button>
+															<button class="btn btn-sm btn-primary ">Atualizar</button>
 														</th:block>
 
 
@@ -117,14 +114,15 @@
 								<tr th:each="o:${orders}">
 									<th scope="row">[[${o.orderId}]]</th>
 
-									<td>Name : [[${o.orderAddress.firstName+'
+									<td>Nome : [[${o.orderAddress.firstName+'
 										'+o.orderAddress.lastName}]]<br> Email :
-										[[${o.orderAddress.email}]] <br> Mobno:
-										[[${o.orderAddress.mobileNo}]] <br> Address :
-										[[${o.orderAddress.address}]] <br> City :
-										[[${o.orderAddress.city}]] <br> State :
-										[[${o.orderAddress.state}]], [[${o.orderAddress.pincode}]]
-
+										[[${o.orderAddress.email}]] <br> Celular:
+										[[${o.orderAddress.mobileNo}]] <br> Endereço :
+										[[${o.orderAddress.address}]] <br> Cidade :
+										[[${o.orderAddress.city}]] <br> Estado :
+<!-- 										[[${o.orderAddress.state}]], [[${o.orderAddress.pincode}]] -->
+										[[${o.orderAddress.state}]] <br> CEP.:
+										 [[${o.orderAddress.pincode}]]
 
 
 									</td>
@@ -140,24 +138,24 @@
 											<div class="row">
 												<div class="col">
 													<select class="form-control" name="st">
-														<option>--select--</option>
-														<option value="1">In Progress</option>
-														<option value="2">Order Received</option>
-														<option value="3">Product Packed</option>
-														<option value="4">Out for Delivery</option>
-														<option value="5">Delivered</option>
-														<option value="6">Cancelled</option>
+														<option>Selecionar</option>
+															<option value="1">Em Andamento</option>
+															<option value="2">Pedido Recebido</option>
+															<option value="3">Produto Embalado</option>
+															<option value="4">Saida para Entrega</option>
+															<option value="5">Entregue</option>
+															<option value="6">Cancelado</option>
 													</select>
 												</div>
 												<input th:value="${o.id}" name="id" type="hidden">
 												<div class="col">
 													<th:block
 														th:if="${o.status=='Cancelled' || o.status=='Delivered'}">
-														<button class="btn btn-primary btn-sm col disabled">Update</button>
+														<button class="btn btn-primary btn-sm col disabled">Atualizar</button>
 													</th:block>
 													<th:block
 														th:unless="${o.status=='Cancelled' || o.status=='Delivered'}">
-														<button class="btn btn-sm btn-primary ">Update</button>
+														<button class="btn btn-sm btn-primary ">Atualizar</button>
 													</th:block>
 												</div>
 											</div>
@@ -169,7 +167,7 @@
 					</table>
 					<th:block th:if="${!srch}">
 						<div class="row">
-							<div class="col-md-4">Total Orders : [[${totalElements}]]</div>
+							<div class="col-md-4">Total de Pedidos : [[${totalElements}]]</div>
 							<div class="col-md-6">
 
 								<nav aria-label="Page navigation example">
@@ -200,7 +198,6 @@
 					</th:block>
 				</div>
 			</div>
-
 		</div>
 	</section>
 </body>

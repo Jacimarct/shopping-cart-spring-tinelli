@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -90,65 +91,124 @@ public class AdminController {
 	}
 
 	@GetMapping("/category")
-	public String category(Model m, @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
-			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-		// m.addAttribute("categorys", categoryService.getAllCategory());
-		Page<Category> page = categoryService.getAllCategorPagination(pageNo, pageSize);
-		List<Category> categorys = page.getContent();
-		m.addAttribute("categorys", categorys);
+	public String category(Model m, 
+	        @RequestParam(defaultValue = "0") int pageNo,
+	        @RequestParam(defaultValue = "10") int pageSize,
+	        HttpSession session) {
 
-		m.addAttribute("pageNo", page.getNumber());
-		m.addAttribute("pageSize", pageSize);
-		m.addAttribute("totalElements", page.getTotalElements());
-		m.addAttribute("totalPages", page.getTotalPages());
-		m.addAttribute("isFirst", page.isFirst());
-		m.addAttribute("isLast", page.isLast());
+	    // Validação dos parâmetros de paginação
+	    if (pageSize <= 0) {
+	        session.setAttribute("errorMsg", "Tamanho da página inválido. Deve ser maior que zero.");
+	        return "redirect:/admin/category";
+	    }
+	    if (pageNo < 0) {
+	        session.setAttribute("errorMsg", "Número da página inválido. Deve ser maior ou igual a zero.");
+	        return "redirect:/admin/category";
+	    }
 
-		return "admin/category";
+	    // Obtenção da página de categorias
+	    Page<Category> page = categoryService.getAllCategorPagination(pageNo, pageSize);
+	    List<Category> categorys = page.getContent();
+
+	    // Verificação de lista vazia
+	    if (categorys == null || categorys.isEmpty()) {
+	        m.addAttribute("emptyMessage", "Nenhuma categoria encontrada.");
+	    }
+
+	    // Adicionando atributos ao modelo
+	    m.addAttribute("categorys", categorys);
+	    m.addAttribute("pageNo", page.getNumber());
+	    m.addAttribute("pageSize", pageSize);
+	    m.addAttribute("totalElements", page.getTotalElements());
+	    m.addAttribute("totalPages", page.getTotalPages());
+	    m.addAttribute("isFirst", page.isFirst());
+	    m.addAttribute("isLast", page.isLast());
+
+	    return "admin/category";
 	}
-
+	
+	
+	/*
+	 * @GetMapping("/category") public String category(Model m, @RequestParam(name =
+	 * "pageNo", defaultValue = "0") Integer pageNo,
+	 * 
+	 * @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+	 * Page<Category> page = categoryService.getAllCategorPagination(pageNo,
+	 * pageSize); List<Category> categorys = page.getContent();
+	 * m.addAttribute("categorys", categorys);
+	 * 
+	 * m.addAttribute("pageNo", page.getNumber()); m.addAttribute("pageSize",
+	 * pageSize); m.addAttribute("totalElements", page.getTotalElements());
+	 * m.addAttribute("totalPages", page.getTotalPages()); m.addAttribute("isFirst",
+	 * page.isFirst()); m.addAttribute("isLast", page.isLast());
+	 * 
+	 * return "admin/category"; }
+	 */
+	
+	
 	@PostMapping("/saveCategory")
-	public String saveCategory(@ModelAttribute Category category, @RequestParam("file") MultipartFile file,
-			HttpSession session) throws IOException {
+	public String saveCategory(@ModelAttribute Category category, 
+	        @RequestParam(required = false) MultipartFile file, // Alteração: Removido "value = 'file'"
+	        HttpSession session) throws IOException {
+	    String imageName = (file != null && !file.isEmpty()) ? file.getOriginalFilename() : "default.jpg";
+	    category.setImageName(imageName);
 
-		String imageName = file != null ? file.getOriginalFilename() : "default.jpg";
-		category.setImageName(imageName);
-
-		Boolean existCategory = categoryService.existCategory(category.getName());
-
-		if (existCategory) {
-			session.setAttribute("errorMsg", "Category Name already exists");
-		} else {
-
-			Category saveCategory = categoryService.saveCategory(category);
-
-			if (ObjectUtils.isEmpty(saveCategory)) {
-				session.setAttribute("errorMsg", "Not saved ! internal server error");
-			} else {
-
-				File saveFile = new ClassPathResource("static/img").getFile();
-
-				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "category_img" + File.separator
-						+ file.getOriginalFilename());
-
-				// System.out.println(path);
-				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
-				session.setAttribute("succMsg", "Saved successfully");
-			}
-		}
-
-		return "redirect:/admin/category";
-	}
-
+	    Boolean existCategory = categoryService.existCategory(category.getName());
+	    if (existCategory) {
+	        session.setAttribute("errorMsg", "O Nome da Categoria já existe");
+	    } else {
+	        Category saveCategory = categoryService.saveCategory(category);
+	        if (Optional.ofNullable(saveCategory).isEmpty()) {
+	            session.setAttribute("errorMsg", "Não foi Salvo! Erro interno do servidor");
+	        } else {
+	            File saveFile = new ClassPathResource("static/img").getFile();
+	            Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "category_img" + File.separator
+	                    + file.getOriginalFilename());
+	            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+	            session.setAttribute("succMsg", "Salvo com Sucesso");
+	        }
+	    }
+	    return "redirect:/admin/category";
+	}	
+	
+	/*
+	 * @PostMapping("/saveCategory") public String saveCategory(@ModelAttribute
+	 * Category category, @RequestParam("file") MultipartFile file, HttpSession
+	 * session) throws IOException {
+	 * 
+	 * String imageName = file != null ? file.getOriginalFilename() : "default.jpg";
+	 * category.setImageName(imageName);
+	 * 
+	 * Boolean existCategory = categoryService.existCategory(category.getName());
+	 * 
+	 * if (existCategory) { session.setAttribute("errorMsg",
+	 * "O Nome da Categoria já existe"); } else {
+	 * 
+	 * Category saveCategory = categoryService.saveCategory(category);
+	 * 
+	 * if (ObjectUtils.isEmpty(saveCategory)) { session.setAttribute("errorMsg",
+	 * "Não foi Salvo! Erro interno do servidor"); } else {
+	 * 
+	 * File saveFile = new ClassPathResource("static/img").getFile();
+	 * 
+	 * Path path = Paths.get(saveFile.getAbsolutePath() + File.separator +
+	 * "category_img" + File.separator + file.getOriginalFilename());
+	 * 
+	 * // System.out.println(path); Files.copy(file.getInputStream(), path,
+	 * StandardCopyOption.REPLACE_EXISTING);
+	 * 
+	 * session.setAttribute("succMsg", "Salvo com Sucesso"); } }
+	 * 
+	 * return "redirect:/admin/category"; }
+	 */
 	@GetMapping("/deleteCategory/{id}")
 	public String deleteCategory(@PathVariable int id, HttpSession session) {
 		Boolean deleteCategory = categoryService.deleteCategory(id);
 
 		if (deleteCategory) {
-			session.setAttribute("succMsg", "category delete success");
+			session.setAttribute("succMsg", "Categoria Excluida com Sucesso");
 		} else {
-			session.setAttribute("errorMsg", "something wrong on server");
+			session.setAttribute("errorMsg", "Algo Errado no Servidor");
 		}
 
 		return "redirect:/admin/category";
@@ -188,9 +248,9 @@ public class AdminController {
 				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 			}
 
-			session.setAttribute("succMsg", "Category update success");
+			session.setAttribute("succMsg", "Categoria Atualizada com Sucesso");
 		} else {
-			session.setAttribute("errorMsg", "something wrong on server");
+			session.setAttribute("errorMsg", "Algo Errado no Servidor");
 		}
 
 		return "redirect:/admin/loadEditCategory/" + category.getId();
@@ -217,9 +277,9 @@ public class AdminController {
 			// System.out.println(path);
 			Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-			session.setAttribute("succMsg", "Product Saved Success");
+			session.setAttribute("succMsg", "Produto Salvo com Sucesso");
 		} else {
-			session.setAttribute("errorMsg", "something wrong on server");
+			session.setAttribute("errorMsg", "Algo Errado no Servidor");
 		}
 
 		return "redirect:/admin/loadAddProduct";
@@ -229,14 +289,6 @@ public class AdminController {
 	public String loadViewProduct(Model m, @RequestParam(defaultValue = "") String ch,
 			@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-
-//		List<Product> products = null;
-//		if (ch != null && ch.length() > 0) {
-//			products = productService.searchProduct(ch);
-//		} else {
-//			products = productService.getAllProducts();
-//		}
-//		m.addAttribute("products", products);
 
 		Page<Product> page = null;
 		if (ch != null && ch.length() > 0) {
@@ -260,9 +312,9 @@ public class AdminController {
 	public String deleteProduct(@PathVariable int id, HttpSession session) {
 		Boolean deleteProduct = productService.deleteProduct(id);
 		if (deleteProduct) {
-			session.setAttribute("succMsg", "Product delete success");
+			session.setAttribute("succMsg", "Produto Excluido com Sucesso");
 		} else {
-			session.setAttribute("errorMsg", "Something wrong on server");
+			session.setAttribute("errorMsg", "Algo Errado no Servidor");
 		}
 		return "redirect:/admin/products";
 	}
@@ -279,13 +331,13 @@ public class AdminController {
 			HttpSession session, Model m) {
 
 		if (product.getDiscount() < 0 || product.getDiscount() > 100) {
-			session.setAttribute("errorMsg", "invalid Discount");
+			session.setAttribute("errorMsg", "Desconto Inválido");
 		} else {
 			Product updateProduct = productService.updateProduct(product, image);
 			if (!ObjectUtils.isEmpty(updateProduct)) {
-				session.setAttribute("succMsg", "Product update success");
+				session.setAttribute("succMsg", "Produto Atualizado com Sucesso");
 			} else {
-				session.setAttribute("errorMsg", "Something wrong on server");
+				session.setAttribute("errorMsg", "Algo Errado no Servidor");
 			}
 		}
 		return "redirect:/admin/editProduct/" + product.getId();
@@ -308,9 +360,9 @@ public class AdminController {
 	public String updateUserAccountStatus(@RequestParam Boolean status, @RequestParam Integer id,@RequestParam Integer type, HttpSession session) {
 		Boolean f = userService.updateAccountStatus(id, status);
 		if (f) {
-			session.setAttribute("succMsg", "Account Status Updated");
+			session.setAttribute("succMsg", "Status da Conta Atualizado");
 		} else {
-			session.setAttribute("errorMsg", "Something wrong on server");
+			session.setAttribute("errorMsg", "Algo Errado no Servidor");
 		}
 		return "redirect:/admin/users?type="+type;
 	}
@@ -318,14 +370,10 @@ public class AdminController {
 	@GetMapping("/orders")
 	public String getAllOrders(Model m, @RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-//		List<ProductOrder> allOrders = orderService.getAllOrders();
-//		m.addAttribute("orders", allOrders);
-//		m.addAttribute("srch", false);
 
 		Page<ProductOrder> page = orderService.getAllOrdersPagination(pageNo, pageSize);
 		m.addAttribute("orders", page.getContent());
 		m.addAttribute("srch", false);
-
 		m.addAttribute("pageNo", page.getNumber());
 		m.addAttribute("pageSize", pageSize);
 		m.addAttribute("totalElements", page.getTotalElements());
@@ -357,9 +405,9 @@ public class AdminController {
 		}
 
 		if (!ObjectUtils.isEmpty(updateOrder)) {
-			session.setAttribute("succMsg", "Status Updated");
+			session.setAttribute("succMsg", "Status Atualizado");
 		} else {
-			session.setAttribute("errorMsg", "status not updated");
+			session.setAttribute("errorMsg", "Status não foi Atualizado");
 		}
 		return "redirect:/admin/orders";
 	}
@@ -374,7 +422,7 @@ public class AdminController {
 			ProductOrder order = orderService.getOrdersByOrderId(orderId.trim());
 
 			if (ObjectUtils.isEmpty(order)) {
-				session.setAttribute("errorMsg", "Incorrect orderId");
+				session.setAttribute("errorMsg", "Identificação do Pedido inválido");
 				m.addAttribute("orderDtls", null);
 			} else {
 				m.addAttribute("orderDtls", order);
@@ -382,10 +430,6 @@ public class AdminController {
 
 			m.addAttribute("srch", true);
 		} else {
-//			List<ProductOrder> allOrders = orderService.getAllOrders();
-//			m.addAttribute("orders", allOrders);
-//			m.addAttribute("srch", false);
-
 			Page<ProductOrder> page = orderService.getAllOrdersPagination(pageNo, pageSize);
 			m.addAttribute("orders", page);
 			m.addAttribute("srch", false);
@@ -425,9 +469,9 @@ public class AdminController {
 //				System.out.println(path);
 				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 			}
-			session.setAttribute("succMsg", "Register successfully");
+			session.setAttribute("succMsg", "Registrado com Sucesso");
 		} else {
-			session.setAttribute("errorMsg", "something wrong on server");
+			session.setAttribute("errorMsg", "Algo Errado no Servidor");
 		}
 
 		return "redirect:/admin/add-admin";
@@ -442,9 +486,9 @@ public class AdminController {
 	public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img, HttpSession session) {
 		UserDtls updateUserProfile = userService.updateUserProfile(user, img);
 		if (ObjectUtils.isEmpty(updateUserProfile)) {
-			session.setAttribute("errorMsg", "Profile not updated");
+			session.setAttribute("errorMsg", "Perfil não Atualizado");
 		} else {
-			session.setAttribute("succMsg", "Profile Updated");
+			session.setAttribute("succMsg", "Perfil Atualizado com sucesso");
 		}
 		return "redirect:/admin/profile";
 	}
@@ -461,15 +505,13 @@ public class AdminController {
 			loggedInUserDetails.setPassword(encodePassword);
 			UserDtls updateUser = userService.updateUser(loggedInUserDetails);
 			if (ObjectUtils.isEmpty(updateUser)) {
-				session.setAttribute("errorMsg", "Password not updated !! Error in server");
+				session.setAttribute("errorMsg", "Senha não Atualizada !! Erro no Servidor");
 			} else {
-				session.setAttribute("succMsg", "Password Updated sucessfully");
+				session.setAttribute("succMsg", "Senha Atualizada com Sucesso");
 			}
 		} else {
-			session.setAttribute("errorMsg", "Current Password incorrect");
+			session.setAttribute("errorMsg", "Senha Atual Incorreta");
 		}
-
 		return "redirect:/admin/profile";
 	}
-
 }

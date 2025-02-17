@@ -3,6 +3,7 @@ package com.ecom.config;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -36,7 +37,7 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 		UserDtls userDtls = userRepository.findByEmail(email);
 
 		if (userDtls != null) {
-
+			
 			if (userDtls.getIsEnable()) {
 
 				if (userDtls.getAccountNonLocked()) {
@@ -45,26 +46,31 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 						userService.increaseFailedAttempt(userDtls);
 					} else {
 						userService.userAccountLock(userDtls);
-						exception = new LockedException("Your account is locked !! failed attempt 3");
+						exception = new LockedException("Sua conta está bloqueada !! 3 tentativas fracassadas");
 					}
 				} else {
 
 					if (userService.unlockAccountTimeExpired(userDtls)) {
-						exception = new LockedException("Your account is unlocked !! Please try to login");
+						exception = new LockedException("Sua conta está desbloqueada !! Por favor, tente fazer o login");
 					} else {
-						exception = new LockedException("your account is Locked !! Please try after sometimes");
+						exception = new LockedException("sua conta está bloqueada !! Por favor, tente mais tarde");
 					}
 				}
 
 			} else {
-				exception = new LockedException("your account is inactive");
+				exception = new LockedException("Sua conta está inativa");
 			}
-		} else {
-			exception = new LockedException("Email & password invalid");
-		}
+			
+// **************************************************************************************************			
+			// Mensagem para credenciais inválidas (email existe, mas senha incorreta)
+			exception = new LockedException("Credenciais inválidas. Por favor, tente novamente.");
+			super.setDefaultFailureUrl("/signin?error");
+			super.onAuthenticationFailure(request, response, exception);
 
-		super.setDefaultFailureUrl("/signin?error");
-		super.onAuthenticationFailure(request, response, exception);
+		   } else {
+		        // Redireciona para a página de cadastro com uma mensagem (email não existe)
+		        request.getSession().setAttribute("errorMsg", "Email não cadastrado. Por favor, crie uma conta.");
+		        response.sendRedirect("/register"); // Altere "/signup" para a rota da sua página de cadastro
+		   }
 	}
-
-}
+}	

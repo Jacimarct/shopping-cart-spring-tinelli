@@ -16,6 +16,7 @@ import java.util.stream.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecom.dto.UserRegistrationDto;
 import com.ecom.model.Category;
 import com.ecom.model.Product;
 import com.ecom.model.UserDtls;
@@ -35,6 +37,10 @@ import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
 import com.ecom.util.CommonUtil;
+
+
+
+import org.springframework.ui.Model;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.mail.MessagingException;
@@ -93,11 +99,17 @@ public class HomeController {
 		return "login";
 	}
 
-	@GetMapping("/register")
-	public String register() {
-		return "register";
-	}
-
+	
+	/*
+	 * @GetMapping("/register") public String register() { return "register"; }
+	 */	
+	
+	  @GetMapping("/register") 
+	  public String ShowRegistrationForma(Model model) {
+	  model.addAttribute("user", new UserRegistrationDto()); 
+	  return "register"; 
+	  }
+	
 	@GetMapping("/products")
 	public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category,
 			@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
@@ -108,8 +120,6 @@ public class HomeController {
 		m.addAttribute("paramValue", category);
 		m.addAttribute("categories", categories);
 
-//		List<Product> products = productService.getAllActiveProducts(category);
-//		m.addAttribute("products", products);
 		Page<Product> page = null;
 		if (StringUtils.isEmpty(ch)) {
 			page = productService.getAllActiveProductPagination(pageNo, pageSize, category);
@@ -120,14 +130,12 @@ public class HomeController {
 		List<Product> products = page.getContent();
 		m.addAttribute("products", products);
 		m.addAttribute("productsSize", products.size());
-
 		m.addAttribute("pageNo", page.getNumber());
 		m.addAttribute("pageSize", pageSize);
 		m.addAttribute("totalElements", page.getTotalElements());
 		m.addAttribute("totalPages", page.getTotalPages());
 		m.addAttribute("isFirst", page.isFirst());
 		m.addAttribute("isLast", page.isLast());
-
 		return "product";
 	}
 
@@ -139,13 +147,13 @@ public class HomeController {
 	}
 
 	@PostMapping("/saveUser")
-	public String saveUser(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session)
+	public String saveUser(@ModelAttribute UserDtls user, Model model, @RequestParam("img") MultipartFile file, HttpSession session)
 			throws IOException {
 
 		Boolean existsEmail = userService.existsEmail(user.getEmail());
 
 		if (existsEmail) {
-			session.setAttribute("errorMsg", "Email already exist");
+			session.setAttribute("errorMsg", "O Email já Existe");
 		} else {
 			String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename();
 			user.setProfileImage(imageName);
@@ -161,10 +169,11 @@ public class HomeController {
 //					System.out.println(path);
 					Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 				}
-				session.setAttribute("succMsg", "Register successfully");
+				session.setAttribute("succMsg", "Registrado com Sucesso");
 			} else {
-				session.setAttribute("errorMsg", "something wrong on server");
+				session.setAttribute("errorMsg", "Algo Errado no Servidor");
 			}
+			
 		}
 
 		return "redirect:/register";
@@ -179,41 +188,49 @@ public class HomeController {
 
 	@PostMapping("/forgot-password")
 	public String processForgotPassword(@RequestParam String email, HttpSession session, HttpServletRequest request)
-			throws UnsupportedEncodingException, MessagingException {
+	        throws UnsupportedEncodingException, MessagingException {
 
-		UserDtls userByEmail = userService.getUserByEmail(email);
+	    UserDtls userByEmail = userService.getUserByEmail(email);
 
-		if (ObjectUtils.isEmpty(userByEmail)) {
-			session.setAttribute("errorMsg", "Invalid email");
-		} else {
+	    if (ObjectUtils.isEmpty(userByEmail)) {
+	        session.setAttribute("errorMsg", "Invalid email");
+	    } else {
+	        String resetToken = UUID.randomUUID().toString();
+	        userService.updateUserResetToken(email, resetToken);
 
-			String resetToken = UUID.randomUUID().toString();
-			userService.updateUserResetToken(email, resetToken);
+	        String url = CommonUtil.generateUrl(request) + "/reset-password?token=" + resetToken;
 
-			// Generate URL :
-			// http://localhost:8080/reset-password?token=sfgdbgfswegfbdgfewgvsrg
+	        try {
+	            Boolean sendMail = commonUtil.sendMail(url, email);
 
-			String url = CommonUtil.generateUrl(request) + "/reset-password?token=" + resetToken;
-
-			Boolean sendMail = commonUtil.sendMail(url, email);
-
-			if (sendMail) {
-				session.setAttribute("succMsg", "Please check your email..Password Reset link sent");
-			} else {
-				session.setAttribute("errorMsg", "Somethong wrong on server ! Email not send");
-			}
-		}
-
-		return "redirect:/forgot-password";
+	            if (sendMail) {
+	                session.setAttribute("succMsg", "Por favor, Verifique seu Email... Link de Redefinição de Senha Enviado");
+	            } else {
+	                session.setAttribute("errorMsg", "Algo deu Errado no Servidor! Email não foi Enviado");
+//		            System.out.println("Erro completo:");
+                
+	            }
+	        } catch (Exception e) {
+	            // Capturando detalhes do erro e objeto associado
+	            session.setAttribute("errorMsg", "Erro ao enviar e-mail: " + e.getMessage());
+//	            System.out.println("Erro completo:");
+	            e.printStackTrace();
+	            if (e instanceof MailAuthenticationException) {
+	                MailAuthenticationException authException = (MailAuthenticationException) e;
+	                System.out.println("Causa raiz: " + authException.getCause());
+	                System.out.println("Detalhes da mensagem: " + authException.getMessage());
+	            }
+	        }
+	    }
+	    return "redirect:/forgot-password";
 	}
 
 	@GetMapping("/reset-password")
 	public String showResetPassword(@RequestParam String token, HttpSession session, Model m) {
 
 		UserDtls userByToken = userService.getUserByToken(token);
-
 		if (userByToken == null) {
-			m.addAttribute("msg", "Your link is invalid or expired !!");
+			m.addAttribute("msg", "Seu Link é Inválido ou Expirou !!");
 			return "message";
 		}
 		m.addAttribute("token", token);
@@ -226,18 +243,16 @@ public class HomeController {
 
 		UserDtls userByToken = userService.getUserByToken(token);
 		if (userByToken == null) {
-			m.addAttribute("errorMsg", "Your link is invalid or expired !!");
+			m.addAttribute("errorMsg", "Seu Link é Inválido ou Expirou !!");
 			return "message";
 		} else {
 			userByToken.setPassword(passwordEncoder.encode(password));
 			userByToken.setResetToken(null);
 			userService.updateUser(userByToken);
 			// session.setAttribute("succMsg", "Password change successfully");
-			m.addAttribute("msg", "Password change successfully");
-
+			m.addAttribute("msg", "Senha Alterada com Sucesso");
 			return "message";
 		}
-
 	}
 
 	@GetMapping("/search")
@@ -247,7 +262,5 @@ public class HomeController {
 		List<Category> categories = categoryService.getAllActiveCategory();
 		m.addAttribute("categories", categories);
 		return "product";
-
 	}
-
 }

@@ -75,9 +75,9 @@ public class UserController {
 		Cart saveCart = cartService.saveCart(pid, uid);
 
 		if (ObjectUtils.isEmpty(saveCart)) {
-			session.setAttribute("errorMsg", "Product add to cart failed");
+			session.setAttribute("errorMsg", "Falha na Inserção do Produto no Carrinho");
 		} else {
-			session.setAttribute("succMsg", "Product added to cart");
+			session.setAttribute("succMsg", "Produto Inserido no Carrinho");
 		}
 		return "redirect:/product/" + pid;
 	}
@@ -164,9 +164,9 @@ public class UserController {
 		}
 
 		if (!ObjectUtils.isEmpty(updateOrder)) {
-			session.setAttribute("succMsg", "Status Updated");
+			session.setAttribute("succMsg", "Situação Atualizada");
 		} else {
-			session.setAttribute("errorMsg", "status not updated");
+			session.setAttribute("errorMsg", "Situação não Atualizada");
 		}
 		return "redirect:/user/user-orders";
 	}
@@ -180,9 +180,9 @@ public class UserController {
 	public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img, HttpSession session) {
 		UserDtls updateUserProfile = userService.updateUserProfile(user, img);
 		if (ObjectUtils.isEmpty(updateUserProfile)) {
-			session.setAttribute("errorMsg", "Profile not updated");
+			session.setAttribute("errorMsg", "Perfil não Atualizado");
 		} else {
-			session.setAttribute("succMsg", "Profile Updated");
+			session.setAttribute("succMsg", "Perfil Atualizado");
 		}
 		return "redirect:/user/profile";
 	}
@@ -199,12 +199,12 @@ public class UserController {
 			loggedInUserDetails.setPassword(encodePassword);
 			UserDtls updateUser = userService.updateUser(loggedInUserDetails);
 			if (ObjectUtils.isEmpty(updateUser)) {
-				session.setAttribute("errorMsg", "Password not updated !! Error in server");
+				session.setAttribute("errorMsg", "Senha não Atualizada !! Erro no Servidor");
 			} else {
-				session.setAttribute("succMsg", "Password Updated sucessfully");
+				session.setAttribute("succMsg", "Senha Atualizada com Sucesso");
 			}
 		} else {
-			session.setAttribute("errorMsg", "Current Password incorrect");
+			session.setAttribute("errorMsg", "Senha Atual Inválida");
 		}
 
 		return "redirect:/user/profile";

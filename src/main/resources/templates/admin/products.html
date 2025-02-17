@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	<section>
 		<div class="container-fluid mt-4 p-3">
 			<div class="row">
-				<p class="text-center fs-3 mt-2">All Products</p>
+				<p class="text-center fs-3 mt-2">Todos os Produtos</p>
 				<hr>
 				<a href="/admin/" class="text-decoration-none"><i
-					class="fa-solid fa-arrow-left"></i> Back</a>
+					class="fa-solid fa-arrow-left"></i> Voltar</a>
 				<th:block th:if="${session.succMsg}">
 					<p class="text-success fw-bold">[[${session.succMsg}]]</p>
 					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -35,29 +35,26 @@
 								<input type="text" class="form-control " name="ch">
 							</div>
 							<div class="col">
-								<button class="btn btn-primary col">Search</button>
+								<button class="btn btn-primary col">Pesquisar</button>
 							</div>
 						</div>
 					</form>
 
 				</div>
-
-
-				<!-- <div class="card card-sh">-->
 				<div class="p-3">
 					<table class="table table-bordered">
 						<thead class="table-light ">
 							<tr>
 								<th scope="col">Sl No</th>
-								<th scope="col">Image</th>
-								<th scope="col">Title</th>
-								<th scope="col">Category</th>
-								<th scope="col">Price</th>
-								<th scope="col">Discount</th>
-								<th scope="col">Discount Price</th>
-								<th scope="col">Status</th>
-								<th scope="col">Stock</th>
-								<th scope="col">Action</th>
+								<th scope="col">Imagem</th>
+								<th scope="col">Título</th>
+								<th scope="col">Categoria</th>
+								<th scope="col">Preço</th>
+								<th scope="col">Desconto</th>
+								<th scope="col">Preço Desconto</th>
+								<th scope="col">Situação</th>
+								<th scope="col">Estoque</th>
+								<th scope="col">Ação</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -74,17 +71,17 @@
 								<td>[[${p.stock}]]</td>
 								<td><a th:href="@{'/admin/editProduct/'+${p.id}}"
 									class="btn btn-sm btn-primary"><i
-										class="fa-solid fa-pen-to-square"></i>Edit</a> <a
+										class="fa-solid fa-pen-to-square"></i> Editar</a> <a
 									th:href="@{'/admin/deleteProduct/'+${p.id}}"
 									class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>
-										Delete</a></td>
+										Excluir</a></td>
 							</tr>
 
 						</tbody>
 					</table>
 
 					<div class="row">
-						<div class="col-md-4">Total Product : [[${totalElements}]]</div>
+						<div class="col-md-4">Total de Produtos : [[${totalElements}]]</div>
 						<div class="col-md-6">
 
 							<nav aria-label="Page navigation example">
@@ -115,7 +112,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- 	</div> -->
 	</section>
 </body>
 </html>

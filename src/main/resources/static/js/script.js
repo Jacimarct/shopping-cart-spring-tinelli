@@ -64,57 +64,57 @@ $(function(){
 		},
 		messages:{
 			name:{
-				required:'name required',
-				lettersonly:'invalid name'
+				required:'Nome Obrigatório',
+				lettersonly:'Nome Inválido'
 			},
 			email: {
-				required: 'email name must be required',
-				space: 'space not allowed',
-				email: 'Invalid email'
+				required: 'O Nome do E-mail deve ser Obrigatório',
+				space: 'Espaço não Permitido',
+				email: 'E-mail Inválido'
 			},
 			mobileNumber: {
-				required: 'mob no must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid mob no',
-				minlength: 'min 10 digit',
-				maxlength: 'max 12 digit'
+				required: 'Não deve ser Necessário Celular',
+				space: 'Espaço não Permitido',
+				numericOnly: 'Número de Celular Inválido',
+				minlength: 'Mínimo 10 Dígitos',
+				maxlength: 'Máximo 12 Dígitos'
 			},
 
 			password: {
-				required: 'password must be required',
-				space: 'space not allowed'
+				required: 'Senha Obrigatória',
+				space: 'Espaço não Permitido'
 
 			},
 			confirmpassword: {
-				required: 'confirm password must be required',
-				space: 'space not allowed',
-				equalTo: 'password mismatch'
+				required: 'Confirmar Senha deve ser Necessária',
+				space: 'Espaço não Permitido',
+				equalTo: 'Senhas não Coincidem'
 
 			},
 			address: {
-				required: 'address must be required',
-				all: 'invalid'
+				required: 'Endereço Obrigatório',
+				all: 'Inválido'
 
 			},
 
 			city: {
-				required: 'city must be required',
-				space: 'space not allowed'
+				required: 'Cidade Obrigatório',
+				space: 'Espaço não Permitido'
 
 			},
 			state: {
-				required: 'state must be required',
-				space: 'space not allowed'
+				required: 'Estado Obrigatório',
+				space: 'Espaço não Permitido'
 
 			},
 			pincode: {
-				required: 'pincode must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid pincode'
+				required: 'O CEP. é Obrigatório',
+				space: 'Espaço não Permitido',
+				numericOnly: 'CEP. Inválido'
 
 			},
 			img: {
-				required: 'image required',
+				required: 'Imagem Obrigatória',
 			}
 		}
 	})
@@ -131,8 +131,8 @@ $orders.validate({
 				lettersonly:true
 			},
 			lastName:{
-				required:true,
-				lettersonly:true
+				required:false,
+				lettersonly:false
 			}
 			,
 			email: {
@@ -176,50 +176,51 @@ $orders.validate({
 		},
 		messages:{
 			firstName:{
-				required:'first required',
-				lettersonly:'invalid name'
+				required:'Nome Obrigatório',
+				lettersonly:'Nome Inválido'
 			},
-			lastName:{
+/*			lastName:{
 				required:'last name required',
 				lettersonly:'invalid name'
 			},
+*/
 			email: {
-				required: 'email name must be required',
-				space: 'space not allowed',
-				email: 'Invalid email'
+				required: 'O Nome do E-mail deve ser Obrigatório',
+				space: 'Espaço não Permitido',
+				email: 'E-mail Inválido'
 			},
 			mobileNo: {
-				required: 'mob no must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid mob no',
-				minlength: 'min 10 digit',
-				maxlength: 'max 12 digit'
+				required: 'Não deve ser Necessário Celular',
+				space: 'Espaço não Permitido',
+				numericOnly: 'Número de Celular Inválido',
+				minlength: 'Mínimo 10 Dígitos',
+				maxlength: 'Máximo 12 Dígitos'
 			}
 		   ,
 			address: {
-				required: 'address must be required',
-				all: 'invalid'
+				required: 'Endereço Obrigatório',
+				all: 'Inválido'
 
 			},
 
 			city: {
-				required: 'city must be required',
-				space: 'space not allowed'
+				required: 'Cidade Obrigatório',
+				space: 'Espaço não Permitido'
 
 			},
 			state: {
-				required: 'state must be required',
-				space: 'space not allowed'
+				required: 'Estado Obrigatório',
+				space: 'Espaço não Permitido'
 
 			},
 			pincode: {
-				required: 'pincode must be required',
-				space: 'space not allowed',
-				numericOnly: 'invalid pincode'
+				required: 'O CEP. é Obrigatório',
+				space: 'Espaço não Permitido',
+				numericOnly: 'CEP. Inválido'
 
 			},
 			paymentType:{
-			required: 'select payment type'
+			required: 'Selecione o Tipo de Pagamento'
 			}
 		}	
 })
@@ -245,24 +246,20 @@ $resetPassword.validate({
 		},
 		messages:{
 		   password: {
-				required: 'password must be required',
-				space: 'space not allowed'
+				required: 'Senha Obrigatória',
+				space: 'Espaço não Permitido'
 
 			},
 			confirmpassword: {
-				required: 'confirm password must be required',
-				space: 'space not allowed',
-				equalTo: 'password mismatch'
+				required: 'A Confirmação da Senha é Obrigatória',
+				space: 'Espaço não Permitido',
+				equalTo: 'Senha Incompatível'
 
 			}
 		}	
 })
 
 
-
-	
-	
-	
 	
 })
 

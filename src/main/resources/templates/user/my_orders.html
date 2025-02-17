@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	<section>
 		<div class="container mt-5 p-5">
 			<div class="row">
-				<p class="text-center fs-3">My Orders</p>
+				<p class="text-center fs-3">Meus Pedidos</p>
 				<th:block th:if="${session.succMsg}">
 					<p class="text-success fw-bold text-center">[[${session.succMsg}]]</p>
 					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -24,12 +24,12 @@
 					<table class="table table-bordered card-sh">
 						<thead >
 							<tr >
-								<th scope="col">Order Id</th>
-								<th scope="col">Date</th>
-								<th scope="col">Product Details</th>
-								<th scope="col">Price</th>
-								<th scope="col">Status</th>
-								<th scope="col">Action</th>
+								<th scope="col">Ordem do Pedido</th>
+								<th scope="col">Data Pedido</th>
+								<th scope="col">Detalhes do Produto</th>
+								<th scope="col">Preço</th>
+								<th scope="col">Situação</th>
+								<th scope="col">Ação</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -44,9 +44,9 @@
 								<td>[[${o.status}]]</td>
 								<td><th:block th:if="${o.status!='Cancelled'}">
 										<a th:href="@{'/user/update-status?id='+${o.id}+'&st=6' }"
-											class="btn btn-sm btn-danger">Cancel</a>
+											class="btn btn-sm btn-danger">Cancelar</a>
 									</th:block> <th:block th:unless="${o.status!='Cancelled'}">
-										<a href="#" class="btn btn-sm btn-danger disabled" >Cancel</a>
+										<a href="#" class="btn btn-sm btn-danger disabled" >Cancelar</a>
 									</th:block></td>
 							</tr>
 						</tbody>

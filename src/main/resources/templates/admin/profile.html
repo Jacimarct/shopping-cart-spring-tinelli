@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
 	th:replace="~{base::layout(~{::section})}">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
@@ -11,7 +11,7 @@
 			<div class="row">
 				<div class="col-md-10 offset-md-1 ">
 
-					<p class="fs-3 text-center">My Profile</p>
+					<p class="fs-3 text-center">Meu Perfil</p>
 					<th:block th:if="${session.succMsg}">
 						<p class="text-success fw-bold  text-center">[[${session.succMsg}]]</p>
 						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -34,13 +34,13 @@
 								<form action="/admin/update-profile" method="post"
 									enctype="multipart/form-data">
 								<tr>
-									<th scope="row">Name</th>
+									<th scope="row">Nome</th>
 									<td>:</td>
 									<td><input type="text" name="name" class="form-control"
 										th:value="${user.name}"></td>
 								</tr>
 								<tr>
-									<th scope="row">Mobile Number</th>
+									<th scope="row">Número do Celular</th>
 									<td>:</td>
 									<td><input type="text" name="mobileNumber"
 										class="form-control" th:value="${user.mobileNumber}"></td>
@@ -52,43 +52,43 @@
 										readonly th:value="${user.email}"></td>
 								</tr>
 								<tr>
-									<th scope="row">Address</th>
+									<th scope="row">Endereço</th>
 									<td>:</td>
 									<td><input type="text" name="address" class="form-control"
 										th:value="${user.address}"></td>
 								</tr>
 								<tr>
-									<th scope="row">City</th>
+									<th scope="row">Cidade</th>
 									<td>:</td>
 									<td><input type="text" name="city" class="form-control"
 										th:value="${user.city}"></td>
 								</tr>
 								<tr>
-									<th scope="row">State</th>
+									<th scope="row">Estado</th>
 									<td>:</td>
 									<td><input type="text" name="state" class="form-control"
 										th:value="${user.state}"></td>
 								</tr>
 								<tr>
-									<th scope="row">Pincode</th>
+									<th scope="row">CEP.:</th>
 									<td>:</td>
 									<td><input type="text" name="pincode" class="form-control"
 										th:value="${user.pincode}"></td>
 								</tr>
 								<tr>
-									<th scope="row">Image</th>
+									<th scope="row">Imagem</th>
 									<td>:</td>
 									<td><input type="file" name="img" class="form-control"
 										value=""></td>
 								</tr>
 								<tr>
-									<th scope="row">Role</th>
+									<th scope="row">Papel</th>
 									<td>:</td>
 									<td><input type="text" name="" class="form-control"
 										readonly th:value="${user.role}"></td>
 								</tr>
 								<tr>
-									<th scope="row">Account Status</th>
+									<th scope="row">Situação da Conta</th>
 									<td>:</td>
 									<td><input type="text" name="" class="form-control"
 										readonly th:value="${user.isEnable}"> <input
@@ -98,7 +98,7 @@
 								<tr>
 									<td></td>
 									<td class="text-center">
-										<button class="btn btn-sm bg-primary text-light">Update</button>
+										<button class="btn btn-sm bg-primary text-light">Atualizar</button>
 									</td>
 								</tr>
 								</form>
@@ -111,33 +111,33 @@
 				<hr>
 				<div class="col-md-10 offset-md-1 mt-1">
 					<div class="row">
-						<p class="text-center fs-3">Change Password</p>
+						<p class="text-center fs-3">Alterar Senha</p>
 						<div class="col-md-6 offset-md-3">
 							<table class="table table-borderless">
 
 								<tbody>
 									<form action="/admin/change-password" method="post">
 										<tr>
-											<th scope="row">Current Password</th>
+											<th scope="row">Senha Atual</th>
 
 											<td><input type="password" name="currentPassword" class="form-control"></td>
 										</tr>
 
 										<tr>
-											<th scope="row">New Password</th>
+											<th scope="row">Nova Senha</th>
 
 											<td><input type="password" name="newPassword" class="form-control"></td>
 										</tr>
 
 										<tr>
-											<th scope="row">Confirm Password</th>
+											<th scope="row">Confirma Senha</th>
 
 											<td><input type="password" name="confirmPassword" class="form-control"></td>
 										</tr>
 										<tr>
 											<td></td>
 											<td class="text-center">
-												<button class="btn btn-sm bg-primary text-light col-md-4">Update</button>
+												<button class="btn btn-sm bg-primary text-light col-md-5">Atualizar</button>
 											</td>
 
 										</tr>
