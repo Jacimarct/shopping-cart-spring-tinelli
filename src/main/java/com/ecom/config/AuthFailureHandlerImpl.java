@@ -61,7 +61,6 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 				exception = new LockedException("Sua conta está inativa");
 			}
 			
-// **************************************************************************************************			
 			// Mensagem para credenciais inválidas (email existe, mas senha incorreta)
 			exception = new LockedException("Credenciais inválidas. Por favor, tente novamente.");
 			super.setDefaultFailureUrl("/signin?error");

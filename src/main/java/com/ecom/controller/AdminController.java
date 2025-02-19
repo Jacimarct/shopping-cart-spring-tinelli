@@ -127,25 +127,6 @@ public class AdminController {
 	    return "admin/category";
 	}
 	
-	
-	/*
-	 * @GetMapping("/category") public String category(Model m, @RequestParam(name =
-	 * "pageNo", defaultValue = "0") Integer pageNo,
-	 * 
-	 * @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-	 * Page<Category> page = categoryService.getAllCategorPagination(pageNo,
-	 * pageSize); List<Category> categorys = page.getContent();
-	 * m.addAttribute("categorys", categorys);
-	 * 
-	 * m.addAttribute("pageNo", page.getNumber()); m.addAttribute("pageSize",
-	 * pageSize); m.addAttribute("totalElements", page.getTotalElements());
-	 * m.addAttribute("totalPages", page.getTotalPages()); m.addAttribute("isFirst",
-	 * page.isFirst()); m.addAttribute("isLast", page.isLast());
-	 * 
-	 * return "admin/category"; }
-	 */
-	
-	
 	@PostMapping("/saveCategory")
 	public String saveCategory(@ModelAttribute Category category, 
 	        @RequestParam(required = false) MultipartFile file, // Alteração: Removido "value = 'file'"
@@ -171,36 +152,6 @@ public class AdminController {
 	    return "redirect:/admin/category";
 	}	
 	
-	/*
-	 * @PostMapping("/saveCategory") public String saveCategory(@ModelAttribute
-	 * Category category, @RequestParam("file") MultipartFile file, HttpSession
-	 * session) throws IOException {
-	 * 
-	 * String imageName = file != null ? file.getOriginalFilename() : "default.jpg";
-	 * category.setImageName(imageName);
-	 * 
-	 * Boolean existCategory = categoryService.existCategory(category.getName());
-	 * 
-	 * if (existCategory) { session.setAttribute("errorMsg",
-	 * "O Nome da Categoria já existe"); } else {
-	 * 
-	 * Category saveCategory = categoryService.saveCategory(category);
-	 * 
-	 * if (ObjectUtils.isEmpty(saveCategory)) { session.setAttribute("errorMsg",
-	 * "Não foi Salvo! Erro interno do servidor"); } else {
-	 * 
-	 * File saveFile = new ClassPathResource("static/img").getFile();
-	 * 
-	 * Path path = Paths.get(saveFile.getAbsolutePath() + File.separator +
-	 * "category_img" + File.separator + file.getOriginalFilename());
-	 * 
-	 * // System.out.println(path); Files.copy(file.getInputStream(), path,
-	 * StandardCopyOption.REPLACE_EXISTING);
-	 * 
-	 * session.setAttribute("succMsg", "Salvo com Sucesso"); } }
-	 * 
-	 * return "redirect:/admin/category"; }
-	 */
 	@GetMapping("/deleteCategory/{id}")
 	public String deleteCategory(@PathVariable int id, HttpSession session) {
 		Boolean deleteCategory = categoryService.deleteCategory(id);

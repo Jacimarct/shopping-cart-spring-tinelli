@@ -50,7 +50,6 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-
 	@GetMapping("/")
 	public String home() {
 		return "user/home";

@@ -97,7 +97,5 @@ public class CartServiceImpl implements CartService {
 			cart.setQuantity(updateQuantity);
 			cartRepository.save(cart);
 		}
-
 	}
-
 }

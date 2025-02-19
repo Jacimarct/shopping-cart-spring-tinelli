@@ -9,9 +9,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
-import java.util.Random;
+/*import java.util.Random;*/
 import java.util.UUID;
-import java.util.stream.Collector;
+/*import java.util.stream.Collector;*/
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -38,9 +38,7 @@ import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
 import com.ecom.util.CommonUtil;
 
-
-
-import org.springframework.ui.Model;
+/*import org.springframework.ui.Model;*/
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.mail.MessagingException;
@@ -98,11 +96,6 @@ public class HomeController {
 	public String login() {
 		return "login";
 	}
-
-	
-	/*
-	 * @GetMapping("/register") public String register() { return "register"; }
-	 */	
 	
 	  @GetMapping("/register") 
 	  public String ShowRegistrationForma(Model model) {
@@ -249,7 +242,6 @@ public class HomeController {
 			userByToken.setPassword(passwordEncoder.encode(password));
 			userByToken.setResetToken(null);
 			userService.updateUser(userByToken);
-			// session.setAttribute("succMsg", "Password change successfully");
 			m.addAttribute("msg", "Senha Alterada com Sucesso");
 			return "message";
 		}

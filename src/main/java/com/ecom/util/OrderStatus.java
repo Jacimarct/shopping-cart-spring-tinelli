@@ -34,5 +34,4 @@ public enum OrderStatus {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }

@@ -177,5 +177,4 @@ public class UserServiceImpl implements UserService {
 	public Boolean existsEmail(String email) {
 		return userRepository.existsByEmail(email);
 	}
-
 }

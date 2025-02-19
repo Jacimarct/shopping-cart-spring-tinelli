@@ -44,8 +44,6 @@
 				<p class="text-center fs-4">Categoria</p>
 				<div class="col-md-2" th:each="c:${category}">
 					<div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
-					
-<!-- 						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded "> -->
 						<div class="card-body text-center">
 							<img th:src="@{'img/category_img/'+${c.imageName}}" width="65%" height="140px"><br>
 							<a th:href="@{'/products?category='+${c.name}}" class="text-decoration-none">[[${c.name}]]</a>
@@ -56,14 +54,11 @@
 		</div>
 		<!-- End Category Module -->
 
-
-
 		<!-- Start Latest Product Module -->
 
 		<div class="container-fluid bg-light p-3">
 			<div class="row">
 				<p class="text-center fs-4">Produto mais Recente</p>
-
 				<div class="col-md-3" th:each="p:${products}">
 					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
@@ -75,8 +70,6 @@
 				</div>
 			</div>
 		</div>
-
-
 		<!-- End Latest Product Module -->
 	</section>
 </body>
