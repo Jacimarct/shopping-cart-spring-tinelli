@@ -81,19 +81,38 @@ public class UserController {
 		return "redirect:/product/" + pid;
 	}
 
+	/*
+	 * @GetMapping("/cart") public String loadCartPage(Principal p, Model m) {
+	 * 
+	 * UserDtls user = getLoggedInUserDetails(p); List<Cart> carts =
+	 * cartService.getCartsByUser(user.getId()); m.addAttribute("carts", carts); if
+	 * (carts.size() > 0) { Double totalOrderPrice = carts.get(carts.size() -
+	 * 1).getTotalOrderPrice(); m.addAttribute("totalOrderPrice", totalOrderPrice);
+	 * } return "/user/cart"; }
+	 */	
+
 	@GetMapping("/cart")
 	public String loadCartPage(Principal p, Model m) {
+	    try {
+	        UserDtls user = getLoggedInUserDetails(p);
+	        System.out.println("Usuário logado: " + user.getEmail()); // Log para depuração
 
-		UserDtls user = getLoggedInUserDetails(p);
-		List<Cart> carts = cartService.getCartsByUser(user.getId());
-		m.addAttribute("carts", carts);
-		if (carts.size() > 0) {
-			Double totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
-			m.addAttribute("totalOrderPrice", totalOrderPrice);
-		}
-		return "/user/cart";
-	}
+	        List<Cart> carts = cartService.getCartsByUser(user.getId());
+	        System.out.println("Número de itens no carrinho: " + carts.size()); // Log para depuração
 
+	        m.addAttribute("carts", carts);
+	        if (carts.size() > 0) {
+	            Double totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
+	            m.addAttribute("totalOrderPrice", totalOrderPrice);
+	        }
+	        return "login";
+	    } catch (Exception e) {
+	        System.err.println("Erro ao carregar o carrinho: " + e.getMessage()); // Log para depuração
+	        e.printStackTrace();
+	        return "redirect:login"; // Redireciona para a página inicial em caso de erro
+	    }
+	}	
+	
 	@GetMapping("/cartQuantityUpdate")
 	public String updateCartQuantity(@RequestParam String sy, @RequestParam Integer cid) {
 		cartService.updateQuantity(sy, cid);
