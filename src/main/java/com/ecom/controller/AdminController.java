@@ -399,7 +399,7 @@ public class AdminController {
 
 	@GetMapping("/add-admin")
 	public String loadAdminAdd() {
-		return "/admin/add_admin";
+		return "admin/add_admin";
 	}
 
 	@PostMapping("/save-admin")
