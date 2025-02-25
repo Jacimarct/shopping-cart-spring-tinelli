@@ -425,7 +425,7 @@ public class AdminController {
 			session.setAttribute("errorMsg", "Algo Errado no Servidor");
 		}
 
-		return "redirect:/admin/add-admin";
+		return "redirect:admin/add-admin";
 	}
 
 	@GetMapping("/profile")
