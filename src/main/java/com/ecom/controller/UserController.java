@@ -123,7 +123,7 @@ public class UserController {
 			m.addAttribute("orderPrice", orderPrice);
 			m.addAttribute("totalOrderPrice", totalOrderPrice);
 		}
-		return "/user/order";
+		return "user/order";
 	}
 
 	@PostMapping("/save-order")
