@@ -44,7 +44,7 @@ $(function(){
 
 			city: {
 				required: true,
-				space: true
+				space: false
 
 			},
 			state: {
@@ -68,12 +68,12 @@ $(function(){
 				lettersonly:'Nome Inválido'
 			},
 			email: {
-				required: 'O Nome do E-mail deve ser Obrigatório',
+				required: 'O E-mail é Obrigatório',
 				space: 'Espaço não Permitido',
 				email: 'E-mail Inválido'
 			},
 			mobileNumber: {
-				required: 'Não deve ser Necessário Celular',
+				required: 'Celular Necessário ',
 				space: 'Espaço não Permitido',
 				numericOnly: 'Número de Celular Inválido',
 				minlength: 'Mínimo 10 Dígitos',
@@ -86,7 +86,7 @@ $(function(){
 
 			},
 			confirmpassword: {
-				required: 'Confirmar Senha deve ser Necessária',
+				required: 'Confirmar Senha',
 				space: 'Espaço não Permitido',
 				equalTo: 'Senhas não Coincidem'
 
@@ -99,7 +99,7 @@ $(function(){
 
 			city: {
 				required: 'Cidade Obrigatório',
-				space: 'Espaço não Permitido'
+//				space: 'Espaço não Permitido'
 
 			},
 			state: {
@@ -114,12 +114,132 @@ $(function(){
 
 			},
 			img: {
-				required: 'Imagem Obrigatória',
+				required: 'Imagem Obrigatória'
 			}
-		}
+		}		
 	})
 	
+	// User Register validation
+
+		var $userRegisterAdmin=$("#userRegisterAdmin");
+
+		$userRegisterAdmin.validate({
+			
+			rules:{
+				nameAdmin:{
+					required:true,
+					lettersonly:true
+				}
+				,
+				emailAdmin: {
+					required: true,
+					space: true,
+					email: true
+				},
+				mobileNumberAdmin: {
+					required: true,
+					space: true,
+					numericOnly: true,
+					minlength: 10,
+					maxlength: 12
+
+				},
+				passwordAdmin: {
+					required: true,
+					space: true
+
+				},
+				cpasswordAdmin: {
+					required: true,
+					space: true,
+					equalTo: '#passAdmin'
+
+				},
+				addressAdmin: {
+					required: true,
+					all: true
+
+				},
+
+				cityAdmin: {
+					required: true,
+					space: false
+
+				},
+				stateAdmin: {
+					required: true,
+
+
+				},
+				pincodeAdmin: {
+					required: true,
+					space: true,
+					numericOnly: true
+
+				}, imgAdmin: {
+					required: true,
+				}
+				
+			},
+			messages:{
+				nameAdmin:{
+					required:'Nome Obrigatório',
+					lettersonly:'Nome Inválido'
+				},
+				emailAdmin: {
+					required: 'O E-mail é Obrigatório',
+					space: 'Espaço não Permitido',
+					email: 'E-mail Inválido'
+				},
+				mobileNumberAdmin: {
+					required: 'Celular Necessário ',
+					space: 'Espaço não Permitido',
+					numericOnly: 'Número de Celular Inválido',
+					minlength: 'Mínimo 10 Dígitos',
+					maxlength: 'Máximo 12 Dígitos'
+				},
+
+				passwordAdmin: {
+					required: 'Senha Obrigatória',
+					space: 'Espaço não Permitido'
+
+				},
+				cpasswordAdmin: {
+					required: 'Confirmar Senha',
+					space: 'Espaço não Permitido',
+					equalTo: 'Senhas não Coincidem'
+
+				},
+				addressAdmin: {
+					required: 'Endereço Obrigatório',
+					all: 'Inválido'
+
+				},
+
+				cityAdmin: {
+					required: 'Cidade Obrigatório',
+	//				space: 'Espaço não Permitido'
+
+				},
+				stateAdmin: {
+					required: 'Estado Obrigatório',
+					space: 'Espaço não Permitido'
+
+				},
+				pincodeAdmin: {
+					required: 'O CEP. é Obrigatório',
+					space: 'Espaço não Permitido',
+					numericOnly: 'CEP. Inválido'
+
+				},
+				imgAdmin: {
+					required: 'Imagem Obrigatória'
+				}
+			}		
+		})
+
 	
+		
 // Orders Validation
 
 var $orders=$("#orders");
@@ -156,7 +276,7 @@ $orders.validate({
 
 			city: {
 				required: true,
-				space: true
+				//space: true
 
 			},
 			state: {
@@ -185,12 +305,12 @@ $orders.validate({
 			},
 */
 			email: {
-				required: 'O Nome do E-mail deve ser Obrigatório',
+				required: 'E-mail Obrigatório',
 				space: 'Espaço não Permitido',
 				email: 'E-mail Inválido'
 			},
 			mobileNo: {
-				required: 'Não deve ser Necessário Celular',
+				required: 'Celular Necessário',
 				space: 'Espaço não Permitido',
 				numericOnly: 'Número de Celular Inválido',
 				minlength: 'Mínimo 10 Dígitos',
@@ -205,7 +325,7 @@ $orders.validate({
 
 			city: {
 				required: 'Cidade Obrigatório',
-				space: 'Espaço não Permitido'
+				//space: 'Espaço não Permitido'
 
 			},
 			state: {
@@ -232,7 +352,7 @@ var $resetPassword=$("#resetPassword");
 $resetPassword.validate({
 		
 		rules:{
-			password: {
+			pass: {
 				required: true,
 				space: true
 
@@ -245,7 +365,7 @@ $resetPassword.validate({
 			}
 		},
 		messages:{
-		   password: {
+		   pass: {
 				required: 'Senha Obrigatória',
 				space: 'Espaço não Permitido'
 

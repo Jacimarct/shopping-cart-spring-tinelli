@@ -397,37 +397,39 @@ public class AdminController {
 
 	}
 
+
 	@GetMapping("/add-admin")
 	public String loadAdminAdd() {
 		return "admin/add_admin";
 	}
 
-	@PostMapping("/save-admin")
-	public String saveAdmin(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session)
-			throws IOException {
 
-		String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename();
-		user.setProfileImage(imageName);
-		UserDtls saveUser = userService.saveAdmin(user);
-
-		if (!ObjectUtils.isEmpty(saveUser)) {
-			if (!file.isEmpty()) {
-				File saveFile = new ClassPathResource("static/img").getFile();
-
-				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator
-						+ file.getOriginalFilename());
-
-//				System.out.println(path);
-				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-			}
-			session.setAttribute("succMsg", "Registrado com Sucesso");
-		} else {
-			session.setAttribute("errorMsg", "Algo Errado no Servidor");
+	
+	@PostMapping("/save-admin") 
+	public String saveAdmin(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
+	  
+	  String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename(); 
+	  user.setProfileImage(imageName); 
+	  UserDtls saveUser = userService.saveAdmin(user);
+	  
+	  if (!ObjectUtils.isEmpty(saveUser)) 
+	  { 
+		  if (!file.isEmpty()) 
+		  { 
+			  File saveFile = new ClassPathResource("static/img").getFile();
+	  Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator + file.getOriginalFilename());
+	  
+	  //System.out.println(path); 
+	  Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING); 
+	  } 
+		  session.setAttribute("succMsg", "Registrado com Sucesso"); 
+		  } else { 
+		session.setAttribute("errorMsg", "Algo Errado no Servidor"); 
 		}
-
-		return "redirect:/admin/add-admin";
-	}
-
+	  
+	  return "redirect:/admin/add-admin"; 
+	 }
+	 
 	@GetMapping("/profile")
 	public String profile() {
 		return "admin/profile";
