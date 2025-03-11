@@ -405,31 +405,41 @@ public class AdminController {
 
 
 	
+	
 	@PostMapping("/save-admin") 
 	public String saveAdmin(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
 	  
-	  String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename(); 
-	  user.setProfileImage(imageName); 
+	  
+	  // Imprimindo informações para depuração
+	  System.out.println("Iniciando método updateProfile...");
+	  System.out.println("Usuário: " + user.getEmail());
+	  System.out.println("Arquivo recebido: " + (file != null ?
+	  file.getOriginalFilename() : "Nenhum arquivo recebido"));
+	  
+	  String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename(); user.setProfileImage(imageName); 
 	  UserDtls saveUser = userService.saveAdmin(user);
 	  
 	  if (!ObjectUtils.isEmpty(saveUser)) 
 	  { 
 		  if (!file.isEmpty()) 
 		  { 
-			  File saveFile = new ClassPathResource("static/img").getFile();
-	  Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator + file.getOriginalFilename());
+			  File saveFile = new ClassPathResource("static/img").getFile(); 
+			  Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator + file.getOriginalFilename());
 	  
 	  //System.out.println(path); 
-	  Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING); 
-	  } 
-		  session.setAttribute("succMsg", "Registrado com Sucesso"); 
+			  Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING); 
+			  } 
+		   
+		  	String firstName = user.getName().split(" ")[0];
+	        session.setAttribute("succMsg","" + firstName + " - Registrado com Sucesso!" ); 
 		  } else { 
-		session.setAttribute("errorMsg", "Algo Errado no Servidor"); 
-		}
-	  
-	  return "redirect:/admin/add-admin"; 
-	 }
-	 
+			  session.setAttribute("errorMsg", "Algo Errado no Servidor"); 
+			  }
+	  			System.out.println("Finalizando método saveAdmin..."); 
+	  			return "redirect:/admin/add-admin"; 
+	  	}	 	
+
+	
 	@GetMapping("/profile")
 	public String profile() {
 		return "admin/profile";
@@ -437,12 +447,21 @@ public class AdminController {
 
 	@PostMapping("/update-profile")
 	public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img, HttpSession session) {
+		
+	    // Imprimindo informações para depuração
+	    System.out.println("Iniciando método updateProfile...");
+	    System.out.println("Usuário: " + user.getEmail());
+	    System.out.println("Arquivo recebido: " + (img != null ? img.getOriginalFilename() : "Nenhum arquivo recebido"));
+
+	 		
+		
 		UserDtls updateUserProfile = userService.updateUserProfile(user, img);
 		if (ObjectUtils.isEmpty(updateUserProfile)) {
 			session.setAttribute("errorMsg", "Perfil não Atualizado");
 		} else {
 			session.setAttribute("succMsg", "Perfil Atualizado com sucesso");
 		}
+		 System.out.println("Finalizando método updateProfile...");
 		return "redirect:/admin/profile";
 	}
 

@@ -52,11 +52,4 @@ public class UserDtls {
 	
 	private String resetToken;
 	
-	/***************************************************************************/	
-	
-	private String pass;
-	private String confirmPassword;
-	
-	/***************************************************************************/
-	
 }

@@ -49,7 +49,9 @@ $(function(){
 			},
 			state: {
 				required: true,
-
+				minlength: 2,
+                maxlength: 2,
+                lettersonly: true // Adicionado para aceitar apenas letras
 
 			},
 			pincode: {
@@ -104,8 +106,8 @@ $(function(){
 			},
 			state: {
 				required: 'Estado Obrigatório',
-				space: 'Espaço não Permitido'
-
+				space: 'Espaço não Permitido',
+				lettersonly: 'Não é permitido número' // Mensagem atualizada
 			},
 			pincode: {
 				required: 'O CEP. é Obrigatório',
@@ -116,27 +118,53 @@ $(function(){
 			img: {
 				required: 'Imagem Obrigatória'
 			}
-		}		
+		},
+		
+		onkeyup: function(element) {
+		            $(element).valid();
+		        },
+		        focusInvalid: false,
+		        invalidHandler: function(event, validator) {
+		            var errors = validator.numberOfInvalids();
+		            if (errors) {
+		                var firstInvalid = $(validator.errorList[0].element);
+		                firstInvalid.focus();
+		                // Mostrar apenas a mensagem de erro do próximo campo obrigatório
+		                $(validator.errorList).each(function() {
+		                    if ($(this.element).val() === "") {
+		                        $(this.element).valid();
+		                        return false;
+		                    }
+		                });
+		            }
+		        },
+		        submitHandler: function(form) {
+		            if (!$(form).valid()) {
+		                // Parar o envio do formulário se não for válido
+		                return false;
+		            }
+		            form.submit();
+		        }
 	})
 	
-	// User Register validation
+	// User Register Admin validation
 
 		var $userRegisterAdmin=$("#userRegisterAdmin");
 
 		$userRegisterAdmin.validate({
 			
 			rules:{
-				nameAdmin:{
+				name:{
 					required:true,
 					lettersonly:true
 				}
 				,
-				emailAdmin: {
+				email: {
 					required: true,
 					space: true,
 					email: true
 				},
-				mobileNumberAdmin: {
+				mobileNumber: {
 					required: true,
 					space: true,
 					numericOnly: true,
@@ -144,54 +172,57 @@ $(function(){
 					maxlength: 12
 
 				},
-				passwordAdmin: {
+				password: {
 					required: true,
 					space: true
 
 				},
-				cpasswordAdmin: {
+				cpassword: {
 					required: true,
 					space: true,
-					equalTo: '#passAdmin'
+					equalTo: '#pass'
 
 				},
-				addressAdmin: {
+				address: {
 					required: true,
 					all: true
 
 				},
 
-				cityAdmin: {
+				city: {
 					required: true,
-					space: false
+					//space: false,
 
 				},
-				stateAdmin: {
+				state: {
 					required: true,
+					minlength: 2,
+					maxlength: 2,
+					lettersonly: true // Adicionado para aceitar apenas letras
 
 
 				},
-				pincodeAdmin: {
+				pincode: {
 					required: true,
 					space: true,
 					numericOnly: true
 
-				}, imgAdmin: {
+				}, img: {
 					required: true,
 				}
 				
 			},
 			messages:{
-				nameAdmin:{
+				name:{
 					required:'Nome Obrigatório',
 					lettersonly:'Nome Inválido'
 				},
-				emailAdmin: {
+				email: {
 					required: 'O E-mail é Obrigatório',
 					space: 'Espaço não Permitido',
 					email: 'E-mail Inválido'
 				},
-				mobileNumberAdmin: {
+				mobileNumber: {
 					required: 'Celular Necessário ',
 					space: 'Espaço não Permitido',
 					numericOnly: 'Número de Celular Inválido',
@@ -199,46 +230,74 @@ $(function(){
 					maxlength: 'Máximo 12 Dígitos'
 				},
 
-				passwordAdmin: {
+				password: {
 					required: 'Senha Obrigatória',
 					space: 'Espaço não Permitido'
 
 				},
-				cpasswordAdmin: {
+				cpassword: {
 					required: 'Confirmar Senha',
 					space: 'Espaço não Permitido',
 					equalTo: 'Senhas não Coincidem'
 
 				},
-				addressAdmin: {
+				address: {
 					required: 'Endereço Obrigatório',
 					all: 'Inválido'
 
 				},
 
-				cityAdmin: {
+				city: {
 					required: 'Cidade Obrigatório',
-	//				space: 'Espaço não Permitido'
+					space: 'Espaço não Permitido',
+					
 
 				},
-				stateAdmin: {
+				state: {
 					required: 'Estado Obrigatório',
-					space: 'Espaço não Permitido'
+					space: 'Espaço não Permitido',
+					lettersonly: 'Não é permitido número' // Mensagem atualizada
+					
 
 				},
-				pincodeAdmin: {
+				pincode: {
 					required: 'O CEP. é Obrigatório',
 					space: 'Espaço não Permitido',
 					numericOnly: 'CEP. Inválido'
 
 				},
-				imgAdmin: {
+				img: {
 					required: 'Imagem Obrigatória'
 				}
-			}		
-		})
+				},
+				
+				onkeyup: function(element) {
+				            $(element).valid();
+				        },
+				        focusInvalid: false,
+				        invalidHandler: function(event, validator) {
+				            var errors = validator.numberOfInvalids();
+				            if (errors) {
+				                var firstInvalid = $(validator.errorList[0].element);
+				                firstInvalid.focus();
+				                // Mostrar apenas a mensagem de erro do próximo campo obrigatório
+				                $(validator.errorList).each(function() {
+				                    if ($(this.element).val() === "") {
+				                        $(this.element).valid();
+				                        return false;
+				                    }
+				                });
+				            }
+				        },
+				        submitHandler: function(form) {
+				            if (!$(form).valid()) {
+				                // Parar o envio do formulário se não for válido
+				                return false;
+				            }
+				            form.submit();
+				        }
+			})
 
-	
 		
 // Orders Validation
 
@@ -281,8 +340,10 @@ $orders.validate({
 			},
 			state: {
 				required: true,
-
-
+				minlength: 2,
+				maxlength: 2,
+				lettersonly: true // Adicionado para aceitar apenas letras
+				
 			},
 			pincode: {
 				required: true,
@@ -330,7 +391,8 @@ $orders.validate({
 			},
 			state: {
 				required: 'Estado Obrigatório',
-				space: 'Espaço não Permitido'
+				space: 'Espaço não Permitido',
+				lettersonly: 'Não é permitido número' // Mensagem atualizada
 
 			},
 			pincode: {
@@ -383,6 +445,12 @@ $resetPassword.validate({
 	
 })
 
+// Adicionando método customizado para permitir apenas letras
+jQuery.validator.addMethod('lettersonly', function(value, element) {
+    return /^[A-Za-z]+$/.test(value);
+}, 'Somente letras são permitidas');
+
+// Outros scripts continuam aqui...
 
 
 jQuery.validator.addMethod('lettersonly', function(value, element) {

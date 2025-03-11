@@ -25,17 +25,16 @@
 							</th:block>
 						</div>
 						<div class="card-body">
-							<form action="/admin/save-admin" enctype="multipart/form-data" id="userRegisterAdmin" novalidate
-								method="post">
+							<form action="/admin/save-admin" method="post" enctype="multipart/form-data" id="userRegisterAdmin" novalidate>
 								<div class="row">
 									<div class="col">
 										<label class="form-label">Nome Completo</label> <input required
-											class="form-control" name="nameAdmin" type="text">
+											class="form-control" name="name" type="text">
 									</div>
 
 									<div class="col">
 										<label class="form-label">Número de Celular</label> <input
-											required class="form-control" name="mobileNumberAdmin"
+											required class="form-control" name="mobileNumber"
 											type="number">
 									</div>
 
@@ -43,19 +42,19 @@
 
 								<div class="mb-3">
 									<label class="form-label">Email</label> <input required
-										class="form-control" name="emailAdmin" type="email">
+										class="form-control" name="email" type="email">
 								</div>
 
 
 								<div class="row">
 									<div class="col">
 										<label class="form-label">Endereço</label> <input required
-											class="form-control" name="addressAdmin" type="text">
+											class="form-control" name="address" type="text">
 									</div>
 
 									<div class="col">
 										<label class="form-label">Cidade</label> <input required
-											class="form-control" name="cityAdmin" type="text">
+											class="form-control" name="city" type="text">
 									</div>
 
 								</div>
@@ -63,12 +62,12 @@
 								<div class="row">
 									<div class="col">
 										<label class="form-label">Estado</label> <input required
-											class="form-control" name="stateAdmin" type="text">
+											class="form-control" name="state" type="text">
 									</div>
 
 									<div class="col">
 										<label class="form-label">Código Postal</label> <input required
-											class="form-control" name="pincodeAdmin" type="number">
+											class="form-control" name="pincode" type="number">
 									</div>
 
 								</div>
@@ -76,17 +75,17 @@
 								<div class="row">
 									<div class="col">
 										<label class="form-label">Senha</label> <input required
-											class="form-control" name="passwordAdmin" type="password" id="passAdmin">
+											class="form-control" name="password" type="password" id="pass">
 									</div>
 									<div class="col">
 										<label class="form-label">Confirme a Senha</label> <input
-											required class="form-control" name="cpasswordAdmin"
+											required class="form-control" name="cpassword"
 											type="password">
 									</div>
 								</div>
 								<div class="mb-3">
 									<label class="form-label">Imagem do Perfil</label> <input
-										class="form-control" name="imgAdmin" type="file">
+										class="form-control" name="img" type="file">
 								</div>
 								<button type="submit"
 									class="btn bg-primary text-white col-md-12">Registrar</button>
