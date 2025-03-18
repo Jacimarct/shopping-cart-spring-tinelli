@@ -43,7 +43,7 @@ public class CommonUtil {
                              "<p>Você solicitou a redefinição de sua senha.</p>" +
                              "<p>Clique no link abaixo para alterar sua senha:</p>" +
                              "<p><a href=\"" + url + "\">Alterar minha senha</a></p>";
-            helper.setSubject("Password Reset");
+            helper.setSubject("Redefinição de Senha");
             helper.setText(content, true);
 
             System.out.println("Linha 49 enviando: " + recipientEmail + " " + content);
