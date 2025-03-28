@@ -255,4 +255,30 @@ public class HomeController {
 		m.addAttribute("categories", categories);
 		return "product";
 	}
+// *******************************************************************************
+
+	@PostMapping("/sell-product")
+	public String sellProduct(@RequestParam Integer productId, @RequestParam int quantity, HttpSession session) {
+	    try {
+	        productService.decreaseStock(productId, quantity);
+	        session.setAttribute("succMsg", "Venda realizada com sucesso!");
+	    } catch (RuntimeException e) {
+	        session.setAttribute("errorMsg", e.getMessage());
+	    }
+	    return "redirect:/products";
+	}
+
+	@PostMapping("/return-product")
+	public String returnProduct(@RequestParam Integer productId, @RequestParam int quantity, HttpSession session) {
+	    try {
+	        productService.increaseStock(productId, quantity);
+	        session.setAttribute("succMsg", "Devolução realizada com sucesso!");
+	    } catch (RuntimeException e) {
+	        session.setAttribute("errorMsg", e.getMessage());
+	    }
+	    return "redirect:/products";
+	}
+	
+// ***************************************************	
+	
 }

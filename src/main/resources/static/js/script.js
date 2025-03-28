@@ -1,173 +1,98 @@
-$(function() {
+$(function () {
     function setupValidation(formId) {
-        var $form = $(formId);
-        
-        $form.validate({
+        $(formId).validate({
             rules: {
-                name: {
+                firstName: {
                     required: true,
-					minlength: 5
+                    minlength: 5
                 },
-
-				firstName: {
-				    required: true,
-				    minlength: 5
-				},
-				
-								
-				lastName: {
-					required: false					
-				},
-				
-				
+                lastName: {
+                    required: false
+                },
                 email: {
                     required: true,
-                    space: true,
                     email: true
                 },
-                mobileNumber: {
+                mobileNo: {
                     required: true,
-                    space: true,
                     numericOnly: true,
                     minlength: 10,
                     maxlength: 12
                 },
-				
-				mobileNo: {
-				    required: true,
-				    space: true,
-				    numericOnly: true,
-				    minlength: 10,
-				    maxlength: 12
-				},
-				
-				
                 password: {
                     required: true,
                     space: true
                 },
                 cpassword: {
                     required: true,
-                    space: true,
                     equalTo: '#pass'
                 },
                 address: {
-                    required: true,
-                    all: true
+                    required: true
                 },
                 city: {
                     required: true
                 },
                 state: {
                     required: true,
-//                    minlength: 2,
                     maxlength: 2,
                     lettersonly: true
                 },
                 pincode: {
                     required: true,
-                    space: true,
                     numericOnly: true
                 },
-                img: {
-                    required: true
-                },
-                paymentType: { 
+                paymentType: {
                     required: true
                 }
             },
             messages: {
-                name: {
+                firstName: {
                     required: 'Nome Obrigatório',
-					minlength: 'Mínimo 5 Dígitos'					
+                    minlength: 'Mínimo 5 Dígitos'
                 },
-
-				firstName: {
-				    required: 'Nome Obrigatório',
-					minlength: 'Mínimo 5 Dígitos'
-				},
-				
-								
-				lastName: {
-				},
-				
                 email: {
                     required: 'E-mail Obrigatório',
-                    space: 'Espaço não Permitido',
                     email: 'E-mail Inválido'
                 },
-                mobileNumber: {
+                mobileNo: {
                     required: 'Celular Necessário',
-                    space: 'Espaço não Permitido',
-                    numericOnly: 'Número de Celular Inválido',
+                    numericOnly: 'Número Inválido',
                     minlength: 'Mínimo 10 Dígitos',
                     maxlength: 'Máximo 12 Dígitos'
                 },
-				
-				mobileNo: {
-				    required: 'Celular Necessário',
-				    space: 'Espaço não Permitido',
-				    numericOnly: 'Número de Celular Inválido',
-				    minlength: 'Mínimo 10 Dígitos',
-				    maxlength: 'Máximo 12 Dígitos'
-				},
-				
-				
                 password: {
-                    required: 'Senha Obrigatória',
-                    space: 'Espaço não Permitido'
+                    required: 'Senha Obrigatória'
                 },
                 cpassword: {
                     required: 'Confirmar Senha',
-                    space: 'Espaço não Permitido',
                     equalTo: 'Senhas não Coincidem'
                 },
                 address: {
-                    required: 'Endereço Obrigatório',
-                    all: 'Inválido'
+                    required: 'Endereço Obrigatório'
                 },
                 city: {
                     required: 'Cidade Obrigatória'
                 },
                 state: {
                     required: 'Estado Obrigatório',
-                    space: 'Espaço não Permitido',
-                    lettersonly: 'Não é permitido número'
+                    lettersonly: 'Somente letras são permitidas'
                 },
                 pincode: {
-                    required: 'O CEP. é Obrigatório',
-                    space: 'Espaço não Permitido',
-                    numericOnly: 'CEP. Inválido'
-                },
-                img: {
-                    required: 'Imagem Obrigatória'
+                    required: 'O CEP é Obrigatório',
+                    numericOnly: 'CEP Inválido'
                 },
                 paymentType: {
                     required: 'Selecione o Tipo de Pagamento'
                 }
             },
-            onkeyup: function(element) {
+            onkeyup: function (element) {
                 $(element).valid();
             },
             focusInvalid: false,
-            invalidHandler: function(event, validator) {
-                var errors = validator.numberOfInvalids();
-                if (errors) {
-                    var firstInvalid = $(validator.errorList[0].element);
-                    firstInvalid.focus();
-                    $(validator.errorList).each(function() {
-                        if ($(this.element).val() === "") {
-                            $(this.element).valid();
-                            return false;
-                        }
-                    });
-                }
-            },
-            submitHandler: function(form) {
-                if (!$(form).valid()) {
-                    return false;
-                }
-                form.submit();
+            submitHandler: function (form) {
+                alert("Formulário validado com sucesso!");
+                form.submit(); // Agora, só envia se for válido
             }
         });
     }
@@ -176,21 +101,64 @@ $(function() {
     setupValidation("#userRegisterAdmin");
     setupValidation("#orders");
     setupValidation("#resetPassword");
-    
-    // Adicionando métodos customizados para permitir apenas letras
-    jQuery.validator.addMethod('lettersonly', function(value, element) {
+
+    jQuery.validator.addMethod('lettersonly', function (value) {
         return /^[A-Za-z]+$/.test(value);
     }, 'Somente letras são permitidas');
 
-    jQuery.validator.addMethod('space', function(value, element) {
-        return /^[^-\s]+$/.test(value);
-    });
-
-    jQuery.validator.addMethod('all', function(value, element) {
-        return /^[^-\s][a-zA-Z0-9_,.\s-]+$/.test(value);
-    });
-
-    jQuery.validator.addMethod('numericOnly', function(value, element) {
+    jQuery.validator.addMethod('numericOnly', function (value) {
         return /^[0-9]+$/.test(value);
     });
+
+    let isConsulting = false;
+
+    function consultarCEP() {
+        if (isConsulting) return;
+        isConsulting = true;
+
+        const cepInput = document.getElementById("pincode");
+        let cep = cepInput.value.replace(/\D/g, "").trim();
+
+        if (!cep || cep.length !== 8) {
+            alert("Por favor, insira um CEP válido com 8 dígitos.");
+            isConsulting = false;
+            return;
+        }
+
+        if (cep !== "29560000") {
+            alert("Não entregamos para este CEP: " + cep);
+            isConsulting = false;
+            cepInput.value = "";
+            return;
+        }
+
+        alert("CEP válido! Obrigado.");
+        cepInput.disabled = true;
+        cepInput.style.backgroundColor = "#f0f0f0";
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                isConsulting = false;
+                cepInput.disabled = false;
+                cepInput.style.backgroundColor = "";
+
+                if (data.erro) {
+                    alert("CEP não encontrado.");
+                    return;
+                }
+
+                document.getElementById("address").value = data.logradouro || "";
+                document.getElementById("city").value = data.localidade || "";
+                document.getElementById("state").value = data.uf || "";
+            })
+            .catch(error => {
+                console.error("Erro ao consultar CEP:", error);
+                alert("Erro ao consultar o CEP. Tente novamente.");
+                isConsulting = false;
+                cepInput.disabled = false;
+            });
+    }
+
+    document.getElementById("pincode").addEventListener("blur", consultarCEP);
 });

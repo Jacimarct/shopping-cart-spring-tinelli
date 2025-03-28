@@ -3,7 +3,7 @@
 	th:replace="~{base::layout(~{::section})}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Editar Produto</title>
 </head>
 <body>
 	<section>
@@ -102,6 +102,51 @@
 								</div>
 								<button class="btn btn-primary col-md-12">Atualizar</button>
 							</form>
+<!-- // ****************************************************************************** -->
+
+                            <!-- ================= NOVA SEÇÃO ADICIONADA ================= -->
+                            <!-- Verifica se o usuário logado é um administrador -->
+                            <th:block th:if="${user.role == 'ROLE_ADMIN'}">
+
+                                <!-- Formulário para Venda -->
+                                <div class="mb-3 mt-4">
+                                    <h5>Vender Produto</h5>
+                                    <form action="/sell-product" method="post">
+                                        <input type="hidden" name="productId" th:value="${product.id}">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Quantidade Vendida</label>
+                                                <input type="number" name="quantity" min="1" required class="form-control">
+                                            </div>
+                                            <div class="col d-flex align-items-end">
+                                                <button type="submit" class="btn btn-success">Vender</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Formulário para Devolução -->
+                                <div class="mb-3 mt-4">
+                                    <h5>Devolver Produto</h5>
+                                    <form action="/return-product" method="post">
+                                        <input type="hidden" name="productId" th:value="${product.id}">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Quantidade Devolvida</label>
+                                                <input type="number" name="quantity" min="1" required class="form-control">
+                                            </div>
+                                            <div class="col d-flex align-items-end">
+                                                <button type="submit" class="btn btn-info text-white">Devolver</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </th:block>
+                            <!-- ================= FIM DA NOVA SEÇÃO ================= -->
+
+<!-- // ****************************************************************************** -->
+							
 						</div>
 					</div>
 				</div>

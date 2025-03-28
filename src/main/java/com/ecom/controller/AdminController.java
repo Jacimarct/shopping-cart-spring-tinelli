@@ -7,7 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecom.model.Category;
@@ -31,6 +35,7 @@ import com.ecom.model.ProductOrder;
 import com.ecom.model.UserDtls;
 import com.ecom.service.CartService;
 import com.ecom.service.CategoryService;
+import com.ecom.service.CepService;
 import com.ecom.service.OrderService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
@@ -394,21 +399,14 @@ public class AdminController {
 
 		}
 		return "admin/orders";
-
 	}
-
-
 	@GetMapping("/add-admin")
 	public String loadAdminAdd() {
 		return "admin/add_admin";
 	}
-
-
-	
 	
 	@PostMapping("/save-admin") 
 	public String saveAdmin(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
-	  
 	  
 	  // Imprimindo informações para depuração
 	  System.out.println("Iniciando método updateProfile...");
@@ -485,5 +483,5 @@ public class AdminController {
 			session.setAttribute("errorMsg", "Senha Atual Incorreta");
 		}
 		return "redirect:/admin/profile";
-	}
-}
+	}	
+}	

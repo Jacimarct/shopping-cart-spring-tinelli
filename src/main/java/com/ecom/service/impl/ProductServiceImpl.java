@@ -149,4 +149,32 @@ public class ProductServiceImpl implements ProductService {
 				ch, pageable);
 		return pageProduct;
 	}
+// ********************************************************************
+    @Override
+    public void decreaseStock(Integer productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        if (product.getStock() < quantity) {
+            throw new RuntimeException("Estoque insuficiente");
+        }
+        product.setStock(product.getStock() - quantity);
+        productRepository.save(product);
+    }
+
+    @Override
+    public void increaseStock(Integer productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        product.setStock(product.getStock() + quantity);
+        productRepository.save(product);
+    }
+    
+// **********************************************************************************    
+	
+	
+	
+	
+	
+	
+	
 }
