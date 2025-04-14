@@ -117,7 +117,7 @@ public class CommonUtil {
         msg = msg.replace("[[category]]", order.getProduct().getCategory());
         msg = msg.replace("[[quantity]]", order.getQuantity().toString());
         msg = msg.replace("[[price]]", order.getPrice().toString());
-        msg = msg.replace("[[paymentType]]", order.getPaymentType());
+        msg = msg.replace("[[paymentType]]", order.getPaymentType().name());
 
         helper.setSubject("Situação do Pedido do Produto");
         helper.setText(msg, true);

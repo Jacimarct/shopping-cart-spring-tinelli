@@ -1,7 +1,17 @@
 package com.ecom.controller;
 
+import java.io.ByteArrayInputStream;
 import java.security.Principal;
 import java.util.List;
+
+import javax.print.DocFlavor;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+
+import javax.print.*;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import java.io.ByteArrayInputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ecom.model.Cart;
 import com.ecom.model.Category;
+import com.ecom.model.OrderItem;
 import com.ecom.model.OrderRequest;
 import com.ecom.model.ProductOrder;
 import com.ecom.model.UserDtls;
@@ -125,16 +136,123 @@ public class UserController {
 		}
 		return "user/order";
 	}
-
-	@PostMapping("/save-order")
-	public String saveOrder(@ModelAttribute OrderRequest request, Principal p) throws Exception {
-		// System.out.println(request);
-		UserDtls user = getLoggedInUserDetails(p);
-		orderService.saveOrder(user.getId(), request);
-
-		return "redirect:/user/success";
+	
+	// Método modificado para incluir a impressão
+	
+	@PostMapping("/save-order") 
+	public String saveOrder(@ModelAttribute OrderRequest request, Principal p, HttpSession session) { 
+	    try {
+	        // Obtém o usuário logado 
+	        UserDtls user = getLoggedInUserDetails(p);
+	  
+	        // Salva o pedido 
+	        orderService.saveOrder(user.getId(), request);
+	  
+	        // Imprime os detalhes do pedido 
+	        printOrderDetails(request, user);
+	  
+	        session.setAttribute("succMsg", "Pedido realizado com sucesso!");
+	        return "redirect:/user/success"; 
+	    } catch (Exception e) {
+	        session.setAttribute("errorMsg", "Erro ao processar pedido: " + e.getMessage());
+	        return "redirect:/user/cart";
+	    }
 	}
-
+	
+	
+	/*
+	 * @PostMapping("/save-order") public String saveOrder(@ModelAttribute
+	 * OrderRequest request, Principal p) throws Exception { // Obtém o usuário
+	 * logado UserDtls user = getLoggedInUserDetails(p);
+	 * 
+	 * // Salva o pedido orderService.saveOrder(user.getId(), request);
+	 * 
+	 * // Imprime os detalhes do pedido printOrderDetails(request, user); // Nova
+	 * chamada para imprimir
+	 * 
+	 * return "redirect:/user/success"; }
+	 */
+	// Novo método para imprimir os detalhes do pedido 
+	private void printOrderDetails(OrderRequest orderRequest, UserDtls user) {
+		
+		try { 
+			// Formata os dados do pedido para impressão 
+			String content = "=== Detalhes do Pedido ===\n" + 
+						"Usuário: " + user.getName() + "\n" +
+						"Endereço: " + orderRequest.getAddress() + "\n" + 
+						"Itens do Pedido:\n";
+// **********************************************************************	  
+			// Verifica se há itens no pedido
+	        if (orderRequest.getItems() != null) {
+	            for (Cart item : orderRequest.getItems()) {
+	                content += "- Produto: " + item.getProduct().getTitle() + 
+	                          ", Quantidade: " + item.getQuantity() + 
+	                          ", Preço: " + item.getProduct().getDiscountPrice() + "\n"; 
+	            }
+	        }	
+	        
+	        content += "Total: " + calculateTotal(orderRequest.getItems()) + "\n";
+	        content += "==========================";	        
+			
+//**********************************************************************			
+	  // Itera sobre os itens do pedido 
+		/*
+		 * for (OrderItem item : orderRequest.getItems()) { content += "- Produto: " +
+		 * item.getProductName() + ", Quantidade: " + item.getQuantity() + "\n"; }
+		 * content += "==========================";
+		 */	  
+	  // Converte o conteúdo para bytes 
+				byte[] data = content.getBytes();
+	  
+	  // Cria um fluxo de entrada com os dados 
+				ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+	  
+	  // Define o tipo de documento (texto simples) 
+				DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
+	  
+	  // Obtém a impressora padrão PrintService defaultPrintService =
+	 // PrintServiceLookup.lookupDefaultPrintService();
+		
+				PrintService defaultPrintService = PrintServiceLookup.lookupDefaultPrintService();		
+	  
+	  if (defaultPrintService != null) { 
+		  // Cria o documento a ser impresso 
+		  Doc doc = new SimpleDoc(inputStream, flavor, null);
+	  
+	  // Cria um trabalho de impressão 
+		  DocPrintJob printJob = defaultPrintService.createPrintJob();
+	  
+	  // Define atributos de impressão (opcional) 
+		  PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+	  
+	  // Envia o documento para a impressora 
+		  printJob.print(doc, attributes);
+	  
+	  System.out.println("Impressão enviada com sucesso para a impressora: " + defaultPrintService.getName());
+	  
+	  } else {
+		  System.out.println("Nenhuma impressora padrão encontrada."); 
+		  } 
+	  }	catch (Exception e) { 
+		  System.err.println("Erro ao imprimir: " + e.getMessage());
+	  e.printStackTrace(); 
+	  }
+}
+	// Método auxiliar para calcular o total
+	private double calculateTotal(List<Cart> items) {
+	    if (items == null) return 0.0;
+	    
+	    double total = 0.0;
+	    for (Cart item : items) {
+	        if (item.getProduct() != null && item.getQuantity() != null) {
+	            total += item.getProduct().getDiscountPrice() * item.getQuantity();
+	        }
+	    }
+	    return total;
+	}
+	 	
+	/*		************************************************/
+	
 	@GetMapping("/success")
 	public String loadSuccess() {
 		return "user/success";

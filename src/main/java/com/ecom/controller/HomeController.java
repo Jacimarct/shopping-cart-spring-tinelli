@@ -1,5 +1,13 @@
 package com.ecom.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import jakarta.servlet.http.HttpSession;
+import java.security.Principal;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -30,10 +38,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ecom.dto.UserRegistrationDto;
 import com.ecom.model.Category;
+import com.ecom.model.OrderRequest;
 import com.ecom.model.Product;
 import com.ecom.model.UserDtls;
+import com.ecom.repository.CartRepository;
 import com.ecom.service.CartService;
 import com.ecom.service.CategoryService;
+import com.ecom.service.OrderService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
 import com.ecom.util.CommonUtil;
@@ -66,6 +77,19 @@ public class HomeController {
 	@Autowired
 	private CartService cartService;
 
+// **********************************************
+
+	
+	@Autowired
+	private OrderService orderService; 
+	// Certifique-se de que esta linha está presente
+
+	@Autowired
+	private CartRepository cartRepository; 
+	// Certifique-se de que	esta linha está presente
+	 
+// *******************************************	
+
 	@ModelAttribute
 	public void getUserDetails(Principal p, Model m) {
 		if (p != null) {
@@ -96,13 +120,13 @@ public class HomeController {
 	public String login() {
 		return "login";
 	}
-	
-	  @GetMapping("/register") 
-	  public String ShowRegistrationForma(Model model) {
-	  model.addAttribute("user", new UserRegistrationDto()); 
-	  return "register"; 
-	  }
-	
+
+	@GetMapping("/register")
+	public String ShowRegistrationForma(Model model) {
+		model.addAttribute("user", new UserRegistrationDto());
+		return "register";
+	}
+
 	@GetMapping("/products")
 	public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category,
 			@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
@@ -140,8 +164,8 @@ public class HomeController {
 	}
 
 	@PostMapping("/saveUser")
-	public String saveUser(@ModelAttribute UserDtls user, Model model, @RequestParam("img") MultipartFile file, HttpSession session)
-			throws IOException {
+	public String saveUser(@ModelAttribute UserDtls user, Model model, @RequestParam("img") MultipartFile file,
+			HttpSession session) throws IOException {
 
 		Boolean existsEmail = userService.existsEmail(user.getEmail());
 
@@ -166,7 +190,7 @@ public class HomeController {
 			} else {
 				session.setAttribute("errorMsg", "Algo Errado no Servidor");
 			}
-			
+
 		}
 
 		return "redirect:/register";
@@ -181,41 +205,42 @@ public class HomeController {
 
 	@PostMapping("/forgot-password")
 	public String processForgotPassword(@RequestParam String email, HttpSession session, HttpServletRequest request)
-	        throws UnsupportedEncodingException, MessagingException {
+			throws UnsupportedEncodingException, MessagingException {
 
-	    UserDtls userByEmail = userService.getUserByEmail(email);
+		UserDtls userByEmail = userService.getUserByEmail(email);
 
-	    if (ObjectUtils.isEmpty(userByEmail)) {
-	        session.setAttribute("errorMsg", "Invalid email");
-	    } else {
-	        String resetToken = UUID.randomUUID().toString();
-	        userService.updateUserResetToken(email, resetToken);
+		if (ObjectUtils.isEmpty(userByEmail)) {
+			session.setAttribute("errorMsg", "Invalid email");
+		} else {
+			String resetToken = UUID.randomUUID().toString();
+			userService.updateUserResetToken(email, resetToken);
 
-	        String url = CommonUtil.generateUrl(request) + "/reset-password?token=" + resetToken;
+			String url = CommonUtil.generateUrl(request) + "/reset-password?token=" + resetToken;
 
-	        try {
-	            Boolean sendMail = commonUtil.sendMail(url, email);
+			try {
+				Boolean sendMail = commonUtil.sendMail(url, email);
 
-	            if (sendMail) {
-	                session.setAttribute("succMsg", "Por favor, Verifique seu Email... Link de Redefinição de Senha Enviado");
-	            } else {
-	                session.setAttribute("errorMsg", "Algo deu Errado no Servidor! Email não foi Enviado");
+				if (sendMail) {
+					session.setAttribute("succMsg",
+							"Por favor, Verifique seu Email... Link de Redefinição de Senha Enviado");
+				} else {
+					session.setAttribute("errorMsg", "Algo deu Errado no Servidor! Email não foi Enviado");
 //		            System.out.println("Erro completo:");
-                
-	            }
-	        } catch (Exception e) {
-	            // Capturando detalhes do erro e objeto associado
-	            session.setAttribute("errorMsg", "Erro ao enviar e-mail: " + e.getMessage());
+
+				}
+			} catch (Exception e) {
+				// Capturando detalhes do erro e objeto associado
+				session.setAttribute("errorMsg", "Erro ao enviar e-mail: " + e.getMessage());
 //	            System.out.println("Erro completo:");
-	            e.printStackTrace();
-	            if (e instanceof MailAuthenticationException) {
-	                MailAuthenticationException authException = (MailAuthenticationException) e;
-	                System.out.println("Causa raiz: " + authException.getCause());
-	                System.out.println("Detalhes da mensagem: " + authException.getMessage());
-	            }
-	        }
-	    }
-	    return "redirect:/forgot-password";
+				e.printStackTrace();
+				if (e instanceof MailAuthenticationException) {
+					MailAuthenticationException authException = (MailAuthenticationException) e;
+					System.out.println("Causa raiz: " + authException.getCause());
+					System.out.println("Detalhes da mensagem: " + authException.getMessage());
+				}
+			}
+		}
+		return "redirect:/forgot-password";
 	}
 
 	@GetMapping("/reset-password")
@@ -259,26 +284,24 @@ public class HomeController {
 
 	@PostMapping("/sell-product")
 	public String sellProduct(@RequestParam Integer productId, @RequestParam int quantity, HttpSession session) {
-	    try {
-	        productService.decreaseStock(productId, quantity);
-	        session.setAttribute("succMsg", "Venda realizada com sucesso!");
-	    } catch (RuntimeException e) {
-	        session.setAttribute("errorMsg", e.getMessage());
-	    }
-	    return "redirect:/products";
+		try {
+			productService.decreaseStock(productId, quantity);
+			session.setAttribute("succMsg", "Venda realizada com sucesso!");
+		} catch (RuntimeException e) {
+			session.setAttribute("errorMsg", e.getMessage());
+		}
+		return "redirect:/products";
 	}
 
 	@PostMapping("/return-product")
 	public String returnProduct(@RequestParam Integer productId, @RequestParam int quantity, HttpSession session) {
-	    try {
-	        productService.increaseStock(productId, quantity);
-	        session.setAttribute("succMsg", "Devolução realizada com sucesso!");
-	    } catch (RuntimeException e) {
-	        session.setAttribute("errorMsg", e.getMessage());
-	    }
-	    return "redirect:/products";
+		try {
+			productService.increaseStock(productId, quantity);
+			session.setAttribute("succMsg", "Devolução realizada com sucesso!");
+		} catch (RuntimeException e) {
+			session.setAttribute("errorMsg", e.getMessage());
+		}
+		return "redirect:/products";
 	}
-	
-// ***************************************************	
-	
-}
+	}
+

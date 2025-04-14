@@ -1,5 +1,7 @@
 package com.ecom.dto;
 
+import com.ecom.model.PaymentType;
+
 	public class UserRegistrationDto {
 	    private String name;
 	    private String email;
@@ -10,8 +12,22 @@ package com.ecom.dto;
 	    private String state;
 	    private String pincode;
 	    private String role;
+	    private PaymentType paymentType;
 
-	    // Construtor padrão necessário para o Spring
+	    @Override
+		public String toString() {
+			return "UserRegistrationDto [paymentType=" + paymentType + "]";
+		}
+
+		public PaymentType getPaymentType() {
+			return paymentType;
+		}
+
+		public void setPaymentType(PaymentType paymentType) {
+			this.paymentType = paymentType;
+		}
+
+		// Construtor padrão necessário para o Spring
 	    public UserRegistrationDto() {
 	        this.role = "ROLE_USER"; // Define o papel padrão como usuário comum
 	    }

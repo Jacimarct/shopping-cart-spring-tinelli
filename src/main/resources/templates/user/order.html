@@ -105,11 +105,13 @@
 							<div class="card-body">
 								<!-- <form action="/login" method="post"> -->
 								<div class="mb-3">
-									<label class="form-label">Selecione o Tipo de Pagamento</label> <select required
-										name="paymentType" class="form-control">
+									<label class="form-label">Forma de Pagamento</label> 
+									<select required name="paymentType" id="paymentType" class="form-control">
 										<option value="">--Selecione--</option>
 										<option value="COD">Pagamento na Entrega</option>
-										<option value="ONLINE">Pagamento Online</option>
+										<option value="PIX">PIX</option>
+										<option value="CREDIT_CARD">Cartão de Crédito</option>
+										<option value="DEBIT_CARD">Cartão de Débito</option>
 									</select>
 
 								</div>
@@ -146,9 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
             { id: "paymentType", message: "Selecione um tipo de pagamento." }
         ];
 
-/*         // Limpar mensagens de erro antes da validação
-        document.querySelectorAll(".error-msg").forEach(el => el.textContent = "");
- */
  
  document.querySelectorAll(".error-msg").forEach(el => el.remove());
  
@@ -163,11 +162,6 @@ document.addEventListener("DOMContentLoaded", function () {
             } else if (field.type === "phone" && !validatePhone(input.value)) {
                 showError(input, "Insira um número de celular válido.");
                 isValid = false;
-/*             } else if (field.type === "cep" && input.value.length !== 8) {
-                showError(input, "CEP deve ter 8 dígitos.");
-                isValid = false;
-            }
- */
  
              } else if (field.type == "cep") { /*  && input.value.length !== 8) { */
 				let cep = input.value.replace(/\D/g, "");
@@ -184,33 +178,5 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-/*     function showError(input, message) {
-        let errorMsg = input.nextElementSibling;
-        if (!errorMsg || !errorMsg.classList.contains("error-msg")) {
-            errorMsg = document.createElement("p");
-            errorMsg.className = "error-msg";
-            errorMsg.style.color = "red";
-            input.parentNode.appendChild(errorMsg);
-        }
-        errorMsg.textContent = message;
-    }
- */
- 
-	 function showError(input, message) {
-		 let errorMsg = document.createElement("div");
-	         errorMsg.className = "error-msg text-danger small mt-1";
-	         errorMsg.tetContent = message;
-	         input.parentNode.appendChild(errorMsg);
-	     }
- 
-    function validateEmail(email) {
-        const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return re.test(email);
-    }
-
-    function validatePhone(phone) {
-        const re = /^[0-9]{10,11}$/; // Suporta números com DDD (exemplo: 27999999999)
-        return re.test(phone);
-    }
 });
 </script>

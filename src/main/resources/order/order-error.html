@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Erro ao Registrar Pedido</title>
+</head>
+<body>
+    <section>
+        <div class="container text-center mt-5 p-5">
+            <h1>Ocorreu um Erro ao Registrar o Pedido</h1>
+            <p>Por favor, tente novamente mais tarde ou entre em contato com o suporte.</p>
+            <a href="/order" class="btn btn-danger">Tentar Novamente</a>
+        </div>
+    </section>
+</body>
+</html>

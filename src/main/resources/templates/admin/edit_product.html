@@ -104,11 +104,11 @@
 							</form>
 <!-- // ****************************************************************************** -->
 
-                            <!-- ================= NOVA SEÇÃO ADICIONADA ================= -->
-                            <!-- Verifica se o usuário logado é um administrador -->
+                            ================= NOVA SEÇÃO ADICIONADA =================
+                            Verifica se o usuário logado é um administrador
                             <th:block th:if="${user.role == 'ROLE_ADMIN'}">
 
-                                <!-- Formulário para Venda -->
+                                Formulário para Venda
                                 <div class="mb-3 mt-4">
                                     <h5>Vender Produto</h5>
                                     <form action="/sell-product" method="post">
@@ -125,7 +125,7 @@
                                     </form>
                                 </div>
 
-                                <!-- Formulário para Devolução -->
+                                Formulário para Devolução
                                 <div class="mb-3 mt-4">
                                     <h5>Devolver Produto</h5>
                                     <form action="/return-product" method="post">
@@ -143,7 +143,7 @@
                                 </div>
 
                             </th:block>
-                            <!-- ================= FIM DA NOVA SEÇÃO ================= -->
+                            ================= FIM DA NOVA SEÇÃO =================
 
 <!-- // ****************************************************************************** -->
 							

@@ -23,6 +23,8 @@ public class Product {
 
 	@Column(length = 500)
 	private String title;
+	
+	private Integer name;
 
 	@Column(length = 5000)
 	private String description;
@@ -40,5 +42,9 @@ public class Product {
 	private Double discountPrice;
 	
 	private Boolean isActive;
+	
+	public String getTitle() {
+		return title;
+	}
 	
 }

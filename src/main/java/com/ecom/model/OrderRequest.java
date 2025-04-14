@@ -1,10 +1,15 @@
 package com.ecom.model;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import jakarta.persistence.EnumType;
 import lombok.Data;
 import lombok.ToString;
 
 @ToString
 @Data
+
 public class OrderRequest {
 
 	private String firstName;
@@ -23,6 +28,11 @@ public class OrderRequest {
 
 	private String pincode;
 	
-	private String paymentType;
+	 private BigDecimal totalAmount;
+	 
+	 private PaymentType paymentType;
 
+	 private List<Cart> items;
+	 
+	 
 }
