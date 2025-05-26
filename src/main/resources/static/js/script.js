@@ -6,6 +6,10 @@ $(function () {
                     required: true,
                     minlength: 5
                 },
+				name: {
+					required: true,
+					minlength: 5
+				},
                 lastName: {
                     required: false
                 },
@@ -19,6 +23,14 @@ $(function () {
                     minlength: 10,
                     maxlength: 12
                 },
+				
+				mobileNumber: {
+				    required: true,
+				    numericOnly: true,
+				    minlength: 10,
+				    maxlength: 12
+				},
+				
                 password: {
                     required: true,
                     space: true
@@ -51,6 +63,11 @@ $(function () {
                     required: 'Nome Obrigatório',
                     minlength: 'Mínimo 5 Dígitos'
                 },
+				name: {
+					required: 'Nome Completo Obrigatório',
+					minlength: 'Mínimo 5 Dígitos'
+					
+				},
                 email: {
                     required: 'E-mail Obrigatório',
                     email: 'E-mail Inválido'
@@ -61,6 +78,14 @@ $(function () {
                     minlength: 'Mínimo 10 Dígitos',
                     maxlength: 'Máximo 12 Dígitos'
                 },
+				mobileNumber: {
+				    required: 'Celular Necessário',
+				    numericOnly: 'Número Inválido',
+				    minlength: 'Mínimo 10 Dígitos',
+				    maxlength: 'Máximo 12 Dígitos'
+				},
+				
+				
                 password: {
                     required: 'Senha Obrigatória'
                 },
@@ -102,13 +127,10 @@ $(function () {
     setupValidation("#orders");
     setupValidation("#resetPassword");
 
+
     jQuery.validator.addMethod('lettersonly', function (value) {
         return /^[A-Za-z]+$/.test(value);
     }, 'Somente letras são permitidas');
-
-    jQuery.validator.addMethod('numericOnly', function (value) {
-        return /^[0-9]+$/.test(value);
-    });
 
     let isConsulting = false;
 
@@ -133,8 +155,8 @@ $(function () {
         }
 
         alert("CEP válido! Obrigado.");
-        cepInput.disabled = true;
-        cepInput.style.backgroundColor = "#f0f0f0";
+//        cepInput.disabled = true;
+//        cepInput.style.backgroundColor = "#f0f0f0";
 
         fetch(`https://viacep.com.br/ws/${cep}/json/`)
             .then(response => response.json())

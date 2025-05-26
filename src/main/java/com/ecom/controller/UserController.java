@@ -36,8 +36,11 @@ import com.ecom.service.CartService;
 import com.ecom.service.CategoryService;
 import com.ecom.service.OrderService;
 import com.ecom.service.UserService;
+import com.ecom.service.PedidoService;
+
 import com.ecom.util.CommonUtil;
 import com.ecom.util.OrderStatus;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -60,6 +63,11 @@ public class UserController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+//      ******************** inserido pelo assistente	
+	
+//     ******************** inserido pelo assistente	*/
+	
 
 	@GetMapping("/")
 	public String home() {
@@ -159,19 +167,6 @@ public class UserController {
 	    }
 	}
 	
-	
-	/*
-	 * @PostMapping("/save-order") public String saveOrder(@ModelAttribute
-	 * OrderRequest request, Principal p) throws Exception { // Obtém o usuário
-	 * logado UserDtls user = getLoggedInUserDetails(p);
-	 * 
-	 * // Salva o pedido orderService.saveOrder(user.getId(), request);
-	 * 
-	 * // Imprime os detalhes do pedido printOrderDetails(request, user); // Nova
-	 * chamada para imprimir
-	 * 
-	 * return "redirect:/user/success"; }
-	 */
 	// Novo método para imprimir os detalhes do pedido 
 	private void printOrderDetails(OrderRequest orderRequest, UserDtls user) {
 		
@@ -195,12 +190,6 @@ public class UserController {
 	        content += "==========================";	        
 			
 //**********************************************************************			
-	  // Itera sobre os itens do pedido 
-		/*
-		 * for (OrderItem item : orderRequest.getItems()) { content += "- Produto: " +
-		 * item.getProductName() + ", Quantidade: " + item.getQuantity() + "\n"; }
-		 * content += "==========================";
-		 */	  
 	  // Converte o conteúdo para bytes 
 				byte[] data = content.getBytes();
 	  
@@ -332,5 +321,8 @@ public class UserController {
 
 		return "redirect:/user/profile";
 	}
+	
+// *****************************inserido pelo assistente *****************************************	
+// *****************************inserido pelo assistente *****************************************	
 
 }

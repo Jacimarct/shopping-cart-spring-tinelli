@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Lovable Endereços</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Lovable Endereços Cadastrados</h1>
+        <a th:href="@{/lovableenderecos/novo}">Novo Endereço</a>
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>Logradouro</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>CEP</th>
+            </tr>
+            <tr th:each="endereco : ${lovableEnderecos}">
+                <td th:text="${endereco.lovableId}"></td>
+                <td th:text="${endereco.lovableLogradouro}"></td>
+                <td th:text="${endereco.lovableCidade}"></td>
+                <td th:text="${endereco.lovableEstado}"></td>
+                <td th:text="${endereco.lovableCep}"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

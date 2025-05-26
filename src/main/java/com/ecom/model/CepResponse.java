@@ -1,15 +1,60 @@
 package com.ecom.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+/**
+ * Classe que representa a resposta da API ViaCEP.
+ * Os campos devem bater com o JSON retornado.
+ */
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true) // Ignora campos extras que não mapeamos
+public class CepResponse {
+
+    private String cep;
+
+    private String logradouro;
+
+    private String complemento;
+
+    private String bairro;
+
+    @JsonProperty("localidade") // Nome no JSON da API
+    private String cidade;
+
+    @JsonProperty("uf") // Nome no JSON da API
+    private String estado;
+
+    private String ibge;
+
+    private String gia;
+
+    private String ddd;
+
+    private String siafi;
+
+    private Boolean erro;
+
+    // Pode-se adicionar validações ou conversões no futuro se necessário
+}
+
+
+
+
+
+/*package com.ecom.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CepResponse {
-    private String cep;
+    private String localidade; // Cidade
+    private String uf; // Estado
+	private String cep;
     private String logradouro;
     private String complemento;
     private String bairro;
-    private String localidade; // Cidade
-    private String uf; // Estado
     private String erro;
 
     // Getters e Setters
@@ -34,3 +79,4 @@ public class CepResponse {
     public String getErro() { return erro; }
     public void setErro(String erro) { this.erro = erro; }
 }
+*/

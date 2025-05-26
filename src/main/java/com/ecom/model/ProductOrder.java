@@ -59,6 +59,13 @@ public class ProductOrder {
 	  @Column(name = "total_amount") 
 	  private BigDecimal totalAmount;
 
+      private String pincode;
+      
+      private String address;
+      
+      private String city;
+      
+      private String state;
 	  
 	  
 	  //	@OneToOne(cascade = CascadeType.ALL)

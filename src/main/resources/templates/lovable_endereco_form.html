@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inserir Lovable Endereço</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Novo Lovable Endereço</h1>
+        <form th:action="@{/lovableenderecos/salvar}" th:object="${lovableEndereco}" method="post">
+            <div>
+                <label>Logradouro:</label>
+                <input type="text" th:field="*{lovableLogradouro}" required>
+            </div>
+            <div>
+                <label>CEP:</label>
+                <input type="text" th:field="*{lovableCep}" required maxlength="8">
+            </div>
+            <div>
+                <label>Cidade:</label>
+                <input type="text" th:field="*{lovableCidade}" readonly>
+            </div>
+            <div>
+                <label>Estado:</label>
+                <input type="text" th:field="*{lovableEstado}" readonly>
+            </div>
+            <div th:if="${erro}">
+                <p th:text="${erro}" style="color:red"></p>
+            </div>
+            <button type="submit">Salvar</button>
+        </form>
+        <a th:href="@{/lovableenderecos/listar}">Ver todos</a>
+    </div>
+</body>
+</html>

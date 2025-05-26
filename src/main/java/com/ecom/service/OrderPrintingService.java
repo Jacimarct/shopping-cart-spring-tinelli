@@ -727,6 +727,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import com.ecom.service.xxx_AddressValidationService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -737,6 +738,23 @@ public class OrderPrintingService {
 
     @Autowired
     private OrderRepository orderRepository;
+    
+//******************************************************************************    
+/*
+    @Autowired
+    private xxx_AddressValidationService addressValidationService;
+
+    public void processarPedido(Order order) {
+        boolean enderecoValido = addressValidationService.isAddressInGuaçui(order.getAddress());
+
+        if (!enderecoValido) {
+            throw new IllegalArgumentException("Endereço fora da área de entrega (Guaçuí - ES).");
+        }
+
+        // Continua o processamento...
+    }
+  */  
+  //******************************************************************************    
 
     @PersistenceContext
     private EntityManager entityManager;
